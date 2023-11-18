@@ -1,6 +1,8 @@
 package com.example.recipebook
 
 import android.os.Bundle
+import android.util.Log
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
@@ -12,6 +14,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -47,6 +50,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -78,12 +82,14 @@ class MainActivity : ComponentActivity() {
                 ) {
 //                    PreviewCategoryGrid()
 //                  fullpage()
-                    Column(){
-                        CategoryButton(imageResourceIds)
 
-                        CategoryButton(imageResourceIds)
-
-                    }
+                    CenterAlignedTopAppBarExample("Guest")
+//                    Column(){
+//                        CategoryButton(imageResourceIds)
+//
+//                        CategoryButton(imageResourceIds)
+//
+//                    }
                 }
             }
         }
@@ -94,12 +100,11 @@ class MainActivity : ComponentActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CenterAlignedTopAppBarExample() {
+fun CenterAlignedTopAppBarExample(username : String) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
 
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-
         topBar = {
             CenterAlignedTopAppBar(
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
@@ -108,7 +113,7 @@ fun CenterAlignedTopAppBarExample() {
                 ),
                 title = {
                     Text(
-                        "Centered Top App Bar",
+                        "Hello, $username!" ,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )
@@ -133,23 +138,18 @@ fun CenterAlignedTopAppBarExample() {
             )
         },
     ) { innerPadding ->
-        CategoryButton(images = imageResourceIds, modifier = Modifier.padding(innerPadding))
+        fullPage(innerPadding = innerPadding)
 
     }
 }
 @Composable
-fun ScrollContent(innerPadding: PaddingValues) {
-    val range = 1..100
-
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxSize(),
-        contentPadding = innerPadding,
-        verticalArrangement = Arrangement.spacedBy(8.dp)
+fun fullPage(innerPadding: PaddingValues) {
+    Column(
+        modifier = Modifier.padding(innerPadding)
     ) {
-        items(range.count()) { index ->
-            Text(text = "- List item number ${index + 1}")
-        }
+        CategoryButton(images = imageResourceIds)
+        CategoryButton(images = imageResourceIds)
+
     }
 }
 //---------------------------------------------
@@ -164,17 +164,19 @@ val imageResourceIds = listOf(
 )
 
 @Composable
-fun CategoryButton (images: List<Int> , modifier: Modifier = Modifier){
+fun CategoryButton (images: List<Int> ){
     Column(
-        modifier =  modifier
+        modifier = Modifier
             .padding(5.dp)
 //            .fillMaxWidth()
 //            .height(200.dp)
             .border(1.dp, Color.Red)
                 ,
+
         verticalArrangement = Arrangement.spacedBy(50.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ){
+
         LazyVerticalGrid(
             columns = GridCells.Adaptive(minSize = 100.dp) ,
             contentPadding = PaddingValues(horizontal = 8.dp, vertical = 8.dp),
@@ -185,6 +187,7 @@ fun CategoryButton (images: List<Int> , modifier: Modifier = Modifier){
                 ElevatedButtonExample(category)
             }
         }
+
 //        ElevatedButtonExample({})
     }
 }
@@ -210,6 +213,7 @@ fun ElevatedButtonExample(img: Int) {
                 .padding(5.dp)
 //                .border(1.dp , Color.Black)
         ) {
+
             // Create icon using the img variable passed to it
             Image(
                 painter = painterResource(id = img),
