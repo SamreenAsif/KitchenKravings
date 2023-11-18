@@ -42,6 +42,7 @@ import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -84,6 +85,7 @@ class MainActivity : ComponentActivity() {
 //                  fullpage()
 
                     CenterAlignedTopAppBarExample("Guest")
+
 //                    Column(){
 //                        CategoryButton(imageResourceIds)
 //
@@ -142,6 +144,7 @@ fun CenterAlignedTopAppBarExample(username : String) {
 
     }
 }
+
 @Composable
 fun fullPage(innerPadding: PaddingValues) {
     Column(
@@ -228,3 +231,6 @@ fun ElevatedButtonExample(img: Int) {
         }
     }
 }
+
+//-------------------------------------------
+ // LOGIN PAGE ----------------------------
