@@ -82,48 +82,10 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = Color.White,
                 ) {
-                    CenteredAppBar("Guest")
+                    MainScreen()
                 }
+
             }
         }
-    }
-}
-//------------------For App Bar -------------
-
-
-
-
-@Composable
-fun fullPage(innerPadding: PaddingValues) {
-    Column(
-        modifier = Modifier.padding(innerPadding)
-    ) {
-        searchBox()
-        CategoryButton(images = imageResourceIds)
-        CategoryButton(images = imageResourceIds)
-
-    }
-}
-//---------------------------------------------
-
-val imageResourceIds = listOf(
-    R.drawable.englishbreakfast,
-    R.drawable.lunch,
-    R.drawable.christmasdinner,
-    R.drawable.cupcake,
-    R.drawable.drink,
-    // Add more resource IDs as needed
-)
-
-//---------------------------SEARCH BOX________________
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun searchBox(){
-    Box(
-        modifier = Modifier.height(100.dp),
-        contentAlignment = Alignment.TopCenter
-    ){
-        SearchBarM3()
     }
 }
