@@ -10,6 +10,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -42,6 +43,7 @@ import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -80,16 +82,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = Color.White,
                 ) {
-//                    PreviewCategoryGrid()
-//                  fullpage()
-
-                    CenterAlignedTopAppBarExample("Guest")
-//                    Column(){
-//                        CategoryButton(imageResourceIds)
-//
-//                        CategoryButton(imageResourceIds)
-//
-//                    }
+                    CenteredAppBar("Guest")
                 }
             }
         }
@@ -98,55 +91,14 @@ class MainActivity : ComponentActivity() {
 //------------------For App Bar -------------
 
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun CenterAlignedTopAppBarExample(username : String) {
-    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
 
-    Scaffold(
-        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-        topBar = {
-            CenterAlignedTopAppBar(
-                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                    containerColor = Color(android.graphics.Color.parseColor("#f06d0a")), //Card background color
-                    titleContentColor = Color.White,
-                ),
-                title = {
-                    Text(
-                        "Hello, $username!" ,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                },
-                navigationIcon = {
-                    IconButton(onClick = { /* do something */ }) {
-                        Icon(
-                            imageVector = Icons.Filled.ArrowBack,
-                            contentDescription = "Localized description"
-                        )
-                    }
-                },
-                actions = {
-                    IconButton(onClick = { /* do something */ }) {
-                        Icon(
-                            imageVector = Icons.Filled.Menu,
-                            contentDescription = "Localized description"
-                        )
-                    }
-                },
-                scrollBehavior = scrollBehavior,
-            )
-        },
-    ) { innerPadding ->
-        fullPage(innerPadding = innerPadding)
 
-    }
-}
 @Composable
 fun fullPage(innerPadding: PaddingValues) {
     Column(
         modifier = Modifier.padding(innerPadding)
     ) {
+        searchBox()
         CategoryButton(images = imageResourceIds)
         CategoryButton(images = imageResourceIds)
 
@@ -163,68 +115,15 @@ val imageResourceIds = listOf(
     // Add more resource IDs as needed
 )
 
+//---------------------------SEARCH BOX________________
+
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CategoryButton (images: List<Int> ){
-    Column(
-        modifier = Modifier
-            .padding(5.dp)
-//            .fillMaxWidth()
-//            .height(200.dp)
-            .border(1.dp, Color.Red)
-                ,
-
-        verticalArrangement = Arrangement.spacedBy(50.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
+fun searchBox(){
+    Box(
+        modifier = Modifier.height(100.dp),
+        contentAlignment = Alignment.TopCenter
     ){
-
-        LazyVerticalGrid(
-            columns = GridCells.Adaptive(minSize = 100.dp) ,
-            contentPadding = PaddingValues(horizontal = 8.dp, vertical = 8.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            items(images) {category ->
-                ElevatedButtonExample(category)
-            }
-        }
-
-//        ElevatedButtonExample({})
-    }
-}
-@Composable
-fun ElevatedButtonExample(img: Int) {
-    ElevatedCard(
-        elevation = CardDefaults.cardElevation(
-            defaultElevation = 12.dp
-        ),
-        modifier = Modifier
-            .size(width = 180.dp, height = 90.dp),
-
-        colors = CardDefaults.cardColors(
-                containerColor = Color(android.graphics.Color.parseColor("#f06d0a")), //Card background color
-                contentColor = Color.White  //Card content color,e.g.text
-        )
-    ){
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(5.dp)
-//                .border(1.dp , Color.Black)
-        ) {
-
-            // Create icon using the img variable passed to it
-            Image(
-                painter = painterResource(id = img),
-                contentDescription = null, // provide a content description if needed
-                modifier = Modifier
-                    .size(50.dp) // Adjust size as needed
-                    .padding(8.dp) // Adjust padding as needed
-            )
-
-            // Other components can be added here, and they will be arranged vertically
-            Text("Elevated")
-        }
+        SearchBarM3()
     }
 }
