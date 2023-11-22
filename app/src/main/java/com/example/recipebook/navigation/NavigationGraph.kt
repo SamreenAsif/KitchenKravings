@@ -5,8 +5,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.firebaseauthentication.presentation.login_screen.SignInScreen
-import com.example.firebaseauthentication.presentation.signup_screen.SignUpScreen
+import com.example.recipebook.presentation.login_screen.SignInScreen
+import com.example.recipebook.presentation.signup_screen.SignUpScreen
 import dagger.hilt.android.lifecycle.HiltViewModel
 
 @Composable
