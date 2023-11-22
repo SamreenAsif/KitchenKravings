@@ -26,8 +26,6 @@ fun SearchBarM3(){
     var query by remember { mutableStateOf("") }
     var active by remember { mutableStateOf(false) }
 
-    val searchHistory = listOf("Android", "Kotlin", "Compose", "Material Design", "GPT-4")
-
     SearchBar(
         query = query,
         onQueryChange = { query = it },
