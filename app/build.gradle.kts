@@ -1,6 +1,10 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    kotlin("kapt")
+   id("com.google.dagger.hilt.android")
+
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -49,6 +53,7 @@ android {
     }
 }
 
+
 dependencies {
 
     implementation("androidx.core:core-ktx:1.9.0")
@@ -58,7 +63,7 @@ dependencies {
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
-    implementation("androidx.compose.material3:material3-window-size-class:1.1.2")
+//    implementation("androidx.compose.material3:material3-window-size-class:1.1.2")
     implementation("androidx.compose.material3:material3")
     implementation("com.google.android.gms:play-services-wallet:19.2.1")
     implementation("com.google.android.material:material:1.10.0")
@@ -76,4 +81,20 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-test-manifest")
     // Navigation Compose
     implementation("androidx.navigation:navigation-compose:2.4.0-alpha10")
+
+    // firebase
+    implementation("com.google.firebase:firebase-auth:22.3.0")
+    implementation("com.google.dagger:hilt-android:2.44")
+    kapt("com.google.dagger:hilt-android-compiler:2.44")
+
+    kapt("androidx.hilt:hilt-compiler:1.1.0")
+    implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
+
+    implementation(platform("com.google.firebase:firebase-bom:32.6.0"))
+    implementation("com.google.firebase:firebase-auth")
+
+}
+// Allow references to generated code
+kapt {
+    correctErrorTypes = true
 }
