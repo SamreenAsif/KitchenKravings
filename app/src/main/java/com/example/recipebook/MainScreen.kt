@@ -1,5 +1,7 @@
 package com.example.recipebook
 import android.annotation.SuppressLint
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
@@ -14,6 +16,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -21,6 +24,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -28,7 +32,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 
-
+@RequiresApi(Build.VERSION_CODES.O)
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -36,34 +40,55 @@ fun MainScreen() {
     val navController = rememberNavController()
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
 
+    // Observe the current destination using NavBackStackEntry
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+
+    // Get the current destination
+    val currentDestination = navBackStackEntry?.destination?.route
+
+    // Determine the title based on the current destination
+    val title = when (currentDestination) {
+        BottomBarScreen.Home.route -> "Hello,Guest!"
+        BottomBarScreen.Profile.route -> BottomBarScreen.Profile.title
+        BottomBarScreen.Settings.route -> BottomBarScreen.Settings.title
+        else -> "Hello,Guest!" // Default title
+    }
+
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             CenterAlignedTopAppBar(
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                    containerColor = Color(android.graphics.Color.parseColor("#f06d0a")), //Card background color
-                    titleContentColor =Color.White,
+                    containerColor = Color(android.graphics.Color.parseColor("#f06d0a")),
+                    titleContentColor = Color.White,
                 ),
                 title = {
-                    androidx.compose.material3.Text(
-                        "Hello, !",
+                    Text(
+                        text = title,
                         maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
+                        overflow = TextOverflow.Ellipsis,
+                        color = Color.White,
+                        fontSize = 20.sp,
+
                     )
                 },
                 navigationIcon = {
-                    androidx.compose.material3.IconButton(onClick = { /* do something */ }) {
-                        androidx.compose.material3.Icon(
-                            imageVector = Icons.Filled.ArrowBack,
-                            contentDescription = "Localized description"
-                        )
+                    if (currentDestination != "home") {
+                        IconButton(onClick = { navController.popBackStack() }) {
+                            Icon(
+                                imageVector = Icons.Default.ArrowBack,
+                                contentDescription = "Localized description",
+                                tint =  Color.White
+                            )
+                        }
                     }
                 },
                 actions = {
-                    androidx.compose.material3.IconButton(onClick = { /* do something */ }) {
-                        androidx.compose.material3.Icon(
-                            imageVector = Icons.Filled.Menu,
-                            contentDescription = "Localized description"
+                    IconButton(onClick = { /* do something */ }) {
+                        Icon(
+                            imageVector = Icons.Default.Menu,
+                            contentDescription = "Localized description",
+                            tint =  Color.White
                         )
                     }
                 },
@@ -72,11 +97,11 @@ fun MainScreen() {
         },
         bottomBar = { BottomBar(navController = navController) }
     )
-    { innerpadding ->
-        BottomNavGraph(navController = navController, modifier = Modifier.padding(innerpadding))
+    { innerPadding ->
+        BottomNavGraph(navController = navController, modifier = Modifier.padding(innerPadding))
     }
-
 }
+
 
 @Composable
 fun BottomBar(navController: NavHostController) {
@@ -116,15 +141,11 @@ fun RowScope.AddItem(
         selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true,
         unselectedContentColor = LocalContentColor.current.copy(alpha = ContentAlpha.disabled),
         icon = {
+
             Icon(
                 painter = painterResource(id = screen.icon),
                 contentDescription = "Navigation Icon",
                 modifier = Modifier.size(35.dp),
-//                tint = if (currentDestination?.hierarchy?.any { it.route == screen.route } == true) {
-//                    Color.Black
-//                } else {
-//                    Color.Unspecified // No tint when unselected
-//                }
             )
         },
         onClick = {
@@ -133,9 +154,6 @@ fun RowScope.AddItem(
                 launchSingleTop = true
             }
         },
-//        modifier = Modifier
-//            .padding(4.dp)
-//            .fillMaxHeight()
     )
 }
 

@@ -23,15 +23,15 @@ sealed class BottomBarScreen(
     )
 
     object Profile : BottomBarScreen(
-        route = "profile",
-        title = "Profile",
+        route = "recipes",
+        title = "Recipes",
         icon = R.drawable.chef1,
 
     )
 
     object Settings : BottomBarScreen(
-        route = "settings",
-        title = "Settings",
+        route = "categories",
+        title = "All Categories",
         icon = R.drawable.allcategory,
 
     )
