@@ -78,7 +78,7 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-test-manifest")
     // Navigation Compose
     implementation("androidx.navigation:navigation-compose:2.4.0-alpha10")
-
+    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.6.2")
     // firebase
     implementation("com.google.firebase:firebase-auth:22.3.0")
     implementation("com.google.dagger:hilt-android:2.44")

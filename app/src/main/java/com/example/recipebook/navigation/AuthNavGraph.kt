@@ -10,13 +10,14 @@ import com.example.recipebook.presentation.signup_screen.SignUpScreen
 import dagger.hilt.android.lifecycle.HiltViewModel
 
 @Composable
-fun NavigationGraph(
+fun AuthNavGraph(
     navController: NavHostController = rememberNavController(),
 ) {
     NavHost(
         navController = navController,
         startDestination = Screens.SignUpScreen.route
     ) {
+
         composable(route = Screens.SignInScreen.route) {
             SignInScreen(navController = navController)
         }
@@ -25,3 +26,4 @@ fun NavigationGraph(
         }
     }
 }
+

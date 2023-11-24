@@ -1,5 +1,5 @@
 package com.example.recipebook
-import androidx.compose.foundation.background
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
@@ -25,8 +25,11 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.recipebook.navigation.BottomNavGraph
 
 
+
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen() {
@@ -39,7 +42,7 @@ fun MainScreen() {
             CenterAlignedTopAppBar(
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
                     containerColor = Color(android.graphics.Color.parseColor("#f06d0a")), //Card background color
-                    titleContentColor = androidx.compose.ui.graphics.Color.White,
+                    titleContentColor =Color.White,
                 ),
                 title = {
                     androidx.compose.material3.Text(
@@ -68,9 +71,7 @@ fun MainScreen() {
             )
         },
         bottomBar = { BottomBar(navController = navController) }
-    ) { innerpadding ->
-        BottomNavGraph(navController = navController, modifier = Modifier.padding(innerpadding))
-    }
+    ) {}
 }
 
 @Composable
@@ -83,18 +84,6 @@ fun BottomBar(navController: NavHostController) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
 
-//    BottomNavigation (
-//        modifier = Modifier.background(color = Color(0xFF2196F3)),
-//    ) {
-//
-//        screens.forEach { screen ->
-//            AddItem(
-//                screen = screen,
-//                currentDestination = currentDestination,
-//                navController = navController
-//            )
-//        }
-//    }
     BottomNavigation (
         modifier = Modifier.height(70.dp) ,
         backgroundColor = Color(android.graphics.Color.parseColor("#f06d0a"))

@@ -7,7 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import com.example.recipebook.navigation.NavigationGraph
+import com.example.recipebook.navigation.AuthNavGraph
 import com.example.recipebook.ui.theme.RecipeBookTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -23,7 +23,8 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = Color.White,
                 ) {
-                    NavigationGraph()
+                    AuthNavGraph()
+
                 }
 
             }
