@@ -62,11 +62,12 @@ fun RecipePage(recipes: List<recipecard>, numColumns: Int? = null, maxHeight: Dp
             .fillMaxSize()
             .padding(2.dp),
         color = Color.White, // Set the background color
-        elevation = 4.dp
+//        elevation = 4.dp
     ) {
         Column(
             modifier = Modifier
-                .padding(2.dp),
+//                .padding(2.dp)
+                ,
             verticalArrangement = Arrangement.spacedBy(30.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {

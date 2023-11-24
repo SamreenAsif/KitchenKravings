@@ -1,22 +1,31 @@
 package com.example.recipebook
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Surface
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.recipebook.data.ItemCategory
 import com.example.recipebook.data.recipecard
 
 
 @Composable
 fun HomeScreen() {
-    LazyColumn {
+    LazyColumn(
+        modifier = Modifier.padding(12.dp)
+    ) {
         item {
             searchBox()
         }
@@ -32,8 +41,21 @@ fun HomeScreen() {
             displayRecipeGrid()
         }
         item{
+            Column(){
+                Text(
+                    "More Categories" ,
+                    fontSize  = 20.sp ,
+                    fontWeight = FontWeight.Medium,
+                    color = Color.Black,
+                    modifier = Modifier.padding(
+                            start = 20.dp, // Left padding
+                            top = 8.dp, // Top padding
+                            bottom = 20.dp // Bottom padding
+                        )
+                )
 
-            CategoryButton(recipeItems , 3 ,400.dp)
+                CategoryButton(recipeItems , 3 ,400.dp , 80.dp)
+            }
         }
 
         // Add more items as needed
@@ -45,8 +67,12 @@ fun HomeScreen() {
 @Composable
 fun searchBox(){
     Box(
-        modifier = Modifier.height(100.dp),
-        contentAlignment = Alignment.TopCenter
+        modifier = Modifier.height(100.dp)
+            .fillMaxWidth()
+            .padding(top = 16.dp)
+            ,
+        contentAlignment = Alignment.TopCenter,
+
     ){
         SearchBarM3()
     }
@@ -89,9 +115,7 @@ val recipeList: List<recipecard> = listOf(
 
 @Composable
 fun displayRecipeGrid(){
-    Surface() {
-        RecipePage(recipes = recipeList , 2 , 400.dp)
-    }
+    RecipePage(recipes = recipeList , 2 , 450.dp)
 }
 //---------------------------------------Component 3
 val recipeItems = listOf(

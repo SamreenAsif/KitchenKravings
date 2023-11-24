@@ -27,11 +27,14 @@ import com.example.recipebook.data.ItemCategory
 
 
 @Composable
-fun CategoryButton (images: List<ItemCategory> , numColumns: Int? = null, maxHeight: Dp? = Dp.Unspecified ){
+fun CategoryButton (
+    images: List<ItemCategory> ,
+    numColumns: Int? = null,
+    maxHeight: Dp? = Dp.Unspecified,
+    min : Dp? = 110.dp
+){
     Column(
         modifier = Modifier
-            .padding(5.dp)
-//            .border(1.dp, Color.Red)
         ,
 
         verticalArrangement = Arrangement.spacedBy(50.dp),
@@ -45,14 +48,16 @@ fun CategoryButton (images: List<ItemCategory> , numColumns: Int? = null, maxHei
             Box(
                 modifier = it // Set the provided maxHeight or the default value
             ) {
-                LazyVerticalGrid(
-                    columns = GridCells.Adaptive(minSize = 110.dp),
-                    contentPadding = PaddingValues(horizontal = 12.dp, vertical = 8.dp),
-                    verticalArrangement = Arrangement.spacedBy(10.dp),
-                    horizontalArrangement = Arrangement.spacedBy(10.dp)
-                ) {
-                    items(images) { category ->
-                        ElevatedButtonExample(category)
+                min?.let { it1 -> GridCells.Adaptive(minSize = it1) }?.let { it2 ->
+                    LazyVerticalGrid(
+                        columns = it2,
+                        contentPadding = PaddingValues(horizontal = 12.dp, vertical = 8.dp),
+                        verticalArrangement = Arrangement.spacedBy(10.dp),
+                        horizontalArrangement = Arrangement.spacedBy(10.dp)
+                    ) {
+                        items(images) { category ->
+                            ElevatedButtonExample(category)
+                        }
                     }
                 }
             }

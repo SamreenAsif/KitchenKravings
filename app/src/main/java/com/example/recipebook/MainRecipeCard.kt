@@ -88,8 +88,8 @@ fun MainRecipeCard (data : recipecard) {
             ) {
                 Text(
                     text = "${data.name}",
-                    fontWeight = FontWeight.Light,
-                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Medium,
+                    fontSize = 18.sp,
                     color = Color.Black,
                     overflow = TextOverflow.Ellipsis,
                     maxLines = 1,
@@ -106,10 +106,10 @@ fun MainRecipeCard (data : recipecard) {
                     text = "${data.desc}",
                     fontWeight = FontWeight.Light,
                     fontSize = 14.sp,
-                    color = Color.Black,
-                    overflow = TextOverflow.Ellipsis,
-                    maxLines = 1,
-                    textAlign = TextAlign.Center,
+                    color = Color.Gray,
+                    overflow = TextOverflow.Visible,
+                    maxLines = 5,
+                    textAlign = TextAlign.Left,
                     modifier = Modifier.fillMaxWidth(),
                 )
             }
