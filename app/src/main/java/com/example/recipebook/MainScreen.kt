@@ -70,9 +70,9 @@ fun MainScreen() {
         },
         bottomBar = { BottomBar(navController = navController) }
     )
-        { innerpadding ->
-            BottomNavGraph(navController = navController, modifier = Modifier.padding(innerpadding))
-        }
+    { innerpadding ->
+        BottomNavGraph(navController = navController, modifier = Modifier.padding(innerpadding))
+    }
 
 }
 
@@ -87,32 +87,19 @@ fun BottomBar(navController: NavHostController) {
     val currentDestination = navBackStackEntry?.destination
 
     BottomNavigation (
-        modifier = Modifier.height(70.dp) ,
+        modifier = Modifier.height(60.dp) ,
         backgroundColor = Color(android.graphics.Color.parseColor("#f06d0a"))
     ){
         screens.forEach { screen ->
-            BottomNavigationItem(
-                icon = {
-                    // Set your icon based on the screen
-                    Icon(imageVector = screen.icon, contentDescription = screen.title)
-                },
-                label = { Text(text = screen.title) },
-                selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true,
-                onClick = {
-                    // Handle navigation or other actions when the item is clicked
-                    navController.navigate(screen.route)
-                },
-                modifier = Modifier
-                    // Apply additional styling to the BottomNavigationItem
-                    .padding(4.dp) // Add padding as needed
-                    .fillMaxHeight(), // Adjust height as needed
-                selectedContentColor = Color.White, // Set color for the selected item
-                unselectedContentColor = Color.Gray // Set color for unselected items
+            AddItem(
+                screen = screen,
+                currentDestination = currentDestination,
+                navController = navController
             )
         }
     }
-
 }
+
 
 @Composable
 fun RowScope.AddItem(
@@ -139,6 +126,11 @@ fun RowScope.AddItem(
                 popUpTo(navController.graph.findStartDestination().id)
                 launchSingleTop = true
             }
-        }
+        },
+        modifier = Modifier
+            // Apply additional styling to the BottomNavigationItem
+            .padding(4.dp) // Add padding as needed
+            .fillMaxHeight(), // Adjust height as needed
+
     )
 }
