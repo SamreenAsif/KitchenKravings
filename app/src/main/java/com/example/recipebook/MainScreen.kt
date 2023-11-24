@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -17,6 +18,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination
@@ -87,7 +89,7 @@ fun BottomBar(navController: NavHostController) {
     val currentDestination = navBackStackEntry?.destination
 
     BottomNavigation (
-        modifier = Modifier.height(60.dp) ,
+        modifier = Modifier.height(70.dp) ,
         backgroundColor = Color(android.graphics.Color.parseColor("#f06d0a"))
     ){
         screens.forEach { screen ->
@@ -111,26 +113,29 @@ fun RowScope.AddItem(
         label = {
             Text(text = screen.title)
         },
+        selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true,
+        unselectedContentColor = LocalContentColor.current.copy(alpha = ContentAlpha.disabled),
         icon = {
             Icon(
-                imageVector = screen.icon,
-                contentDescription = "Navigation Icon"
+                painter = painterResource(id = screen.icon),
+                contentDescription = "Navigation Icon",
+                modifier = Modifier.size(35.dp),
+//                tint = if (currentDestination?.hierarchy?.any { it.route == screen.route } == true) {
+//                    Color.Black
+//                } else {
+//                    Color.Unspecified // No tint when unselected
+//                }
             )
         },
-        selected = currentDestination?.hierarchy?.any {
-            it.route == screen.route
-        } == true,
-        unselectedContentColor = LocalContentColor.current.copy(alpha = ContentAlpha.disabled),
         onClick = {
             navController.navigate(screen.route) {
                 popUpTo(navController.graph.findStartDestination().id)
                 launchSingleTop = true
             }
         },
-        modifier = Modifier
-            // Apply additional styling to the BottomNavigationItem
-            .padding(4.dp) // Add padding as needed
-            .fillMaxHeight(), // Adjust height as needed
-
+//        modifier = Modifier
+//            .padding(4.dp)
+//            .fillMaxHeight()
     )
 }
+
