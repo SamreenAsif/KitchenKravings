@@ -25,8 +25,6 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.recipebook.navigation.BottomNavGraph
-
 
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -71,7 +69,11 @@ fun MainScreen() {
             )
         },
         bottomBar = { BottomBar(navController = navController) }
-    ) {}
+    )
+        { innerpadding ->
+            BottomNavGraph(navController = navController, modifier = Modifier.padding(innerpadding))
+        }
+
 }
 
 @Composable

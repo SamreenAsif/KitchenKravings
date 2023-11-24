@@ -42,6 +42,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.example.recipebook.MainScreen
 import com.example.recipebook.R
 import com.example.recipebook.navigation.Screens
 import com.example.recipebook.presentation.signup_screen.SignUpViewModel
@@ -51,6 +52,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun SignInScreen(
     navController: NavHostController,
+
     viewModel: SignInViewModel = hiltViewModel()
 ) {
     var email by rememberSaveable {
@@ -107,8 +109,11 @@ fun SignInScreen(
         },
             modifier= Modifier
                 .fillMaxWidth()
-                .padding(top = 20.dp, start = 30.dp, end = 30.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = Color.Black, contentColor = Color.White), shape = RoundedCornerShape(15.dp)
+                .padding(top = 20.dp, start = 30.dp, end = 30.dp)
+                ,
+            colors = ButtonDefaults.buttonColors(containerColor = Color.Black, contentColor = Color.White),
+            shape = RoundedCornerShape(15.dp),
+
         ) {
             Text(text = "Sign In", color=Color.White, modifier = Modifier.padding(7.dp))
         }
@@ -157,6 +162,7 @@ fun SignInScreen(
                     if(state.value?.isSuccess?.isNotEmpty()==true){
                         val success = state.value?.isSuccess
                         Toast.makeText(context, "${success}", Toast.LENGTH_LONG).show()
+                        navController.navigate(Screens.MainScreen.route)
                     }
                 }
             }

@@ -1,17 +1,14 @@
-package com.example.recipebook.navigation
+package com.example.recipebook
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.example.recipebook.BottomBarScreen
-import com.example.recipebook.HomeScreen
-import com.example.recipebook.ProfileScreen
-import com.example.recipebook.SettingScreen
+
 
 
 @Composable
-fun BottomNavGraph(navController: NavHostController ) {
+fun BottomNavGraph(navController: NavHostController , modifier : Modifier) {
     NavHost(
         navController = navController,
         startDestination = BottomBarScreen.Home.route
@@ -20,7 +17,7 @@ fun BottomNavGraph(navController: NavHostController ) {
             HomeScreen()
         }
         composable(route = BottomBarScreen.Profile.route) {
-            ProfileScreen()
+            RecipesScreen()
         }
         composable(route = BottomBarScreen.Settings.route) {
             SettingScreen()
