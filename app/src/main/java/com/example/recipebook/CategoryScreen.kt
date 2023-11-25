@@ -18,7 +18,7 @@ val categoryItems = listOf(
     // Add more items as needed
 )
 @Composable
-fun SettingScreen()
+fun CategoryScreen()
 {
     CategoryButton(images = categoryItems)
 }

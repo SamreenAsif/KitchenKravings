@@ -20,7 +20,7 @@ fun BottomNavGraph(navController: NavHostController , modifier : Modifier) {
             RecipesScreen()
         }
         composable(route = BottomBarScreen.Settings.route) {
-            SettingScreen()
+            CategoryScreen()
         }
     }
 }

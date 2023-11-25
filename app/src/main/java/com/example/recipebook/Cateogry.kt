@@ -34,7 +34,7 @@ fun CategoryButton (
     min : Dp? = 110.dp
 ){
     Column(
-        modifier = Modifier
+        modifier = Modifier.padding(bottom=30.dp)
         ,
 
         verticalArrangement = Arrangement.spacedBy(50.dp),
