@@ -10,7 +10,10 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TopAppBarDefaults
@@ -18,6 +21,7 @@ import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -31,6 +35,7 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import kotlinx.coroutines.launch
 
 @RequiresApi(Build.VERSION_CODES.O)
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -39,62 +44,50 @@ import androidx.navigation.compose.rememberNavController
 fun MainScreen() {
     val navController = rememberNavController()
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
-
-    // Observe the current destination using NavBackStackEntry
-    val navBackStackEntry by navController.currentBackStackEntryAsState()
-
-    // Get the current destination
-    val currentDestination = navBackStackEntry?.destination?.route
-
-    // Determine the title based on the current destination
-    val title = when (currentDestination) {
-        BottomBarScreen.Home.route -> "Hello,Guest!"
-        BottomBarScreen.Profile.route -> BottomBarScreen.Profile.title
-        BottomBarScreen.Settings.route -> BottomBarScreen.Settings.title
-        else -> "Hello,Guest!" // Default title
-    }
-
+    val scaffoldState = rememberScaffoldState()
+    val scope = rememberCoroutineScope()
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+        scaffoldState = scaffoldState,
         topBar = {
-            CenterAlignedTopAppBar(
-                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                    containerColor = Color(android.graphics.Color.parseColor("#f06d0a")),
-                    titleContentColor = Color.White,
-                ),
-                title = {
-                    Text(
-                        text = title,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                        color = Color.White,
-                        fontSize = 20.sp,
-
-                    )
-                },
-                navigationIcon = {
-                    if (currentDestination != "home") {
-                        IconButton(onClick = { navController.popBackStack() }) {
-                            Icon(
-                                imageVector = Icons.Default.ArrowBack,
-                                contentDescription = "Localized description",
-                                tint =  Color.White
-                            )
-                        }
+            AppBar(
+                navController , scrollBehavior ,
+                onNavigationIconClick = {
+                    scope.launch {
+                        scaffoldState.drawerState.open()
                     }
-                },
-                actions = {
-                    IconButton(onClick = { /* do something */ }) {
-                        Icon(
-                            imageVector = Icons.Default.Menu,
-                            contentDescription = "Localized description",
-                            tint =  Color.White
-                        )
-                    }
-                },
-                scrollBehavior = scrollBehavior,
+                }
             )
         },
+        drawerGesturesEnabled = scaffoldState.drawerState.isOpen,
+        drawerContent = {
+            DrawerHeader()
+            DrawerBody(
+                items = listOf(
+                    MenuItem(
+                        id = "home",
+                        title = "Home",
+                        contentDescription = "Go to home screen",
+                        icon = Icons.Default.Home
+                    ),
+                    MenuItem(
+                        id = "settings",
+                        title = "Settings",
+                        contentDescription = "Go to settings screen",
+                        icon = Icons.Default.Settings
+                    ),
+                    MenuItem(
+                        id = "help",
+                        title = "Help",
+                        contentDescription = "Get help",
+                        icon = Icons.Default.Info
+                    ),
+                ),
+                onItemClick = {
+                    println("Clicked on ${it.title}")
+                }
+            )
+        } ,
         bottomBar = { BottomBar(navController = navController) }
     )
     { innerPadding ->
