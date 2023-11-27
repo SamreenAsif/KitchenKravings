@@ -2,33 +2,28 @@ package com.example.recipebook
 import android.annotation.SuppressLint
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.RowScope
-import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -61,32 +56,75 @@ fun MainScreen() {
         },
         drawerGesturesEnabled = scaffoldState.drawerState.isOpen,
         drawerContent = {
-            DrawerHeader()
-            DrawerBody(
-                items = listOf(
-                    MenuItem(
-                        id = "home",
-                        title = "Home",
-                        contentDescription = "Go to home screen",
-                        icon = Icons.Default.Home
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color(android.graphics.Color.parseColor("#f78c3b")),) // Set the desired background color
+            ) {
+                DrawerHeader()
+                DrawerBody(
+                    items = listOf(
+                        MenuItem(
+                            id = "categories",
+                            title = "All Categories",
+                            contentDescription = "Go to all categories",
+                            icon = R.drawable.allcategory
+                        ),
+                        MenuItem(
+                            id = "courses",
+                            title = "Courses",
+                            contentDescription = "Go to settings screen",
+                            icon = R.drawable.cooking
+                        ),
+                        MenuItem(
+                            id = "cuisine",
+                            title = "Cuisine",
+                            contentDescription = "Get help",
+                            icon = R.drawable.cooking
+                        ),
+                        MenuItem(
+                            id = "vegetarian",
+                            title = "Vegetarian",
+                            contentDescription = "Get help",
+                            icon = R.drawable.cooking
+                        ),
+                        MenuItem(
+                            id = "non-veg",
+                            title = "Non-Veg",
+                            contentDescription = "Get help",
+                            icon = R.drawable.cooking
+                        ),
+                        MenuItem(
+                            id = "healthy",
+                            title = "Healthy",
+                            contentDescription = "Get help",
+                            icon = R.drawable.cooking
+                        ),
+                        MenuItem(
+                            id = "bakery",
+                            title = "Bakery",
+                            contentDescription = "Get help",
+                            icon = R.drawable.cupcake
+                        ),
+                        MenuItem(
+                            id = "desserts",
+                            title = "Desserts",
+                            contentDescription = "Get help",
+                            icon = R.drawable.cupcake
+                        ),
+                        MenuItem(
+                            id = "logout",
+                            title = "Logout",
+                            contentDescription = "Get help",
+                            icon = R.drawable.recipe1
+                        ),
                     ),
-                    MenuItem(
-                        id = "settings",
-                        title = "Settings",
-                        contentDescription = "Go to settings screen",
-                        icon = Icons.Default.Settings
-                    ),
-                    MenuItem(
-                        id = "help",
-                        title = "Help",
-                        contentDescription = "Get help",
-                        icon = Icons.Default.Info
-                    ),
-                ),
-                onItemClick = {
-                    println("Clicked on ${it.title}")
-                }
-            )
+
+                    onItemClick = {
+                        println("Clicked on ${it.title}")
+                    }
+                )
+            }
         } ,
         bottomBar = { BottomBar(navController = navController) }
     )
