@@ -1,5 +1,7 @@
 package com.example.recipebook
 
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
@@ -14,8 +16,11 @@ import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
@@ -46,8 +51,10 @@ fun AppBar(
             containerColor = Color(android.graphics.Color.parseColor("#f06d0a")),
             titleContentColor = Color.White,
         ),
-        actions = {
-            IconButton(onClick = onNavigationIconClick) {
+        navigationIcon = {
+            IconButton(
+                onClick = onNavigationIconClick ,
+            ) {
                 Icon(
                     imageVector = Icons.Default.Menu,
                     contentDescription = "Localized description",
@@ -55,6 +62,7 @@ fun AppBar(
                 )
             }
         },
+
         title = {
             Text(
                 text = title,
