@@ -1,6 +1,6 @@
-package com.example.firebaseauthentication.data
+package com.example.recipebook.data
 
-import com.example.firebaseauthentication.util.Resource
+import com.example.recipebook.util.Resource
 import com.google.firebase.auth.AuthResult
 import kotlinx.coroutines.flow.Flow
 

@@ -1,7 +1,7 @@
 package com.example.recipebook.di
 
-import com.example.firebaseauthentication.data.AuthRepository
-import com.example.firebaseauthentication.data.AuthRepositoryImpl
+import com.example.recipebook.data.AuthRepository
+import com.example.recipebook.data.AuthRepositoryImpl
 import com.google.firebase.auth.FirebaseAuth
 import dagger.Module
 import dagger.Provides

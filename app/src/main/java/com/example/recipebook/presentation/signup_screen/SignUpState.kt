@@ -1,4 +1,4 @@
-package com.example.firebaseauthentication.presentation.signup_screen
+package com.example.recipebook.presentation.signup_screen
 
 data class SignUpState(val isLoading: Boolean = false,
                        val isSuccess: String? = "",

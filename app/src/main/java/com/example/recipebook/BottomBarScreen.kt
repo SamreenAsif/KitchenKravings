@@ -1,31 +1,31 @@
 package com.example.recipebook
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Settings
-import androidx.compose.ui.graphics.vector.ImageVector
 
 sealed class BottomBarScreen(
     val route: String,
     val title: String,
-    val icon: ImageVector
+    val icon: Int,
+
 ) {
+
     object Home : BottomBarScreen(
         route = "home",
         title = "Home",
-        icon = Icons.Default.Home
+        icon = R.drawable.restaurant,
+
     )
 
-    object Profile : BottomBarScreen(
-        route = "profile",
-        title = "Profile",
-        icon = Icons.Default.Person
+    object Recipes : BottomBarScreen(
+        route = "recipes",
+        title = "Recipes",
+        icon = R.drawable.chef1,
+
     )
 
-    object Settings : BottomBarScreen(
-        route = "settings",
-        title = "Settings",
-        icon = Icons.Default.Settings
+    object Categories : BottomBarScreen(
+        route = "categories",
+        title = "All Categories",
+        icon = R.drawable.allcategory,
+
     )
 }

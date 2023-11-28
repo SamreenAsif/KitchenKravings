@@ -2,12 +2,10 @@ package com.example.recipebook.presentation.login_screen
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.firebaseauthentication.data.AuthRepository
-import com.example.firebaseauthentication.util.Resource
+import com.example.recipebook.data.AuthRepository
+import com.example.recipebook.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.collectIndexed
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject

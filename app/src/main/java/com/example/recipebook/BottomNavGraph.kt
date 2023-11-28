@@ -6,6 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 
 
+
 @Composable
 fun BottomNavGraph(navController: NavHostController , modifier : Modifier) {
     NavHost(
@@ -13,13 +14,16 @@ fun BottomNavGraph(navController: NavHostController , modifier : Modifier) {
         startDestination = BottomBarScreen.Home.route
     ) {
         composable(route = BottomBarScreen.Home.route) {
-            HomeScreen()
+            HomeScreen(navController)
         }
-        composable(route = BottomBarScreen.Profile.route) {
-            ProfileScreen()
+        composable(route = BottomBarScreen.Recipes.route) {
+            RecipesScreen(navController = navController)
         }
-        composable(route = BottomBarScreen.Settings.route) {
-            SettingScreen()
+        composable(route = BottomBarScreen.Categories.route) {
+            CategoryScreen()
+        }
+        composable(route = "videoPage") {
+            VideoPage(navController = navController)
         }
     }
 }

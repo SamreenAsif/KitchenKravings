@@ -1,23 +1,25 @@
 package com.example.recipebook
+import android.annotation.SuppressLint
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.RowScope
-import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
@@ -25,103 +27,141 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import kotlinx.coroutines.launch
 
-
+@RequiresApi(Build.VERSION_CODES.O)
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen() {
     val navController = rememberNavController()
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
-
+    val scaffoldState = rememberScaffoldState()
+    val scope = rememberCoroutineScope()
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+        scaffoldState = scaffoldState,
         topBar = {
-            CenterAlignedTopAppBar(
-                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                    containerColor = Color(android.graphics.Color.parseColor("#f06d0a")), //Card background color
-                    titleContentColor = androidx.compose.ui.graphics.Color.White,
-                ),
-                title = {
-                    androidx.compose.material3.Text(
-                        "Hello, !",
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                },
-                navigationIcon = {
-                    androidx.compose.material3.IconButton(onClick = { /* do something */ }) {
-                        androidx.compose.material3.Icon(
-                            imageVector = Icons.Filled.ArrowBack,
-                            contentDescription = "Localized description"
-                        )
+            AppBar(
+                navController , scrollBehavior ,
+                onNavigationIconClick = {
+                    scope.launch {
+                        scaffoldState.drawerState.open()
                     }
-                },
-                actions = {
-                    androidx.compose.material3.IconButton(onClick = { /* do something */ }) {
-                        androidx.compose.material3.Icon(
-                            imageVector = Icons.Filled.Menu,
-                            contentDescription = "Localized description"
-                        )
-                    }
-                },
-                scrollBehavior = scrollBehavior,
+                }
             )
         },
+        drawerGesturesEnabled = scaffoldState.drawerState.isOpen,
+        drawerContent = {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color(android.graphics.Color.parseColor("#f78c3b")),) // Set the desired background color
+            ) {
+                DrawerHeader()
+                DrawerBody(
+                    items = listOf(
+                        MenuItem(
+                            id = "categories",
+                            title = "All Categories",
+                            contentDescription = "Go to all categories",
+                            icon = R.drawable.allcategory
+                        ),
+                        MenuItem(
+                            id = "courses",
+                            title = "Courses",
+                            contentDescription = "Go to settings screen",
+                            icon = R.drawable.courses
+                        ),
+                        MenuItem(
+                            id = "cuisine",
+                            title = "Cuisine",
+                            contentDescription = "Get help",
+                            icon = R.drawable.cuisine
+                        ),
+                        MenuItem(
+                            id = "vegetarian",
+                            title = "Vegetarian",
+                            contentDescription = "Get help",
+                            icon = R.drawable.vegan
+                        ),
+                        MenuItem(
+                            id = "non-veg",
+                            title = "Non-Veg",
+                            contentDescription = "Get help",
+                            icon = R.drawable.nonveg
+
+                        ),
+                        MenuItem(
+                            id = "healthy",
+                            title = "Healthy",
+                            contentDescription = "Get help",
+                            icon = R.drawable.healthyfood1
+                        ),
+                        MenuItem(
+                            id = "bakery",
+                            title = "Bakery",
+                            contentDescription = "Get help",
+                            icon = R.drawable.bakery2
+                        ),
+                        MenuItem(
+                            id = "desserts",
+                            title = "Desserts",
+                            contentDescription = "Get help",
+                            icon = R.drawable.sweets
+                        ),
+                        MenuItem(
+                            id = "logout",
+                            title = "Logout",
+                            contentDescription = "Get help",
+                            icon = R.drawable.logout2
+                        ),
+                    ),
+                    onItemClick = { menuItem ->
+                        when (menuItem.id) {
+                            "categories" -> navController.navigate(BottomBarScreen.Categories.route)
+//                            "courses" -> navController.navigate(Screen.Courses.route)
+//                            "cuisine" -> navController.navigate(Screen.Cuisine.route)
+                            // Repeat the above for other menu items
+//                            "logout" -> navController.navigate(Screen.Logout.route)
+                        }
+                    }
+
+                )
+            }
+        } ,
         bottomBar = { BottomBar(navController = navController) }
-    ) { innerpadding ->
-        BottomNavGraph(navController = navController, modifier = Modifier.padding(innerpadding))
+    )
+    { innerPadding ->
+        BottomNavGraph(navController = navController, modifier = Modifier.padding(innerPadding))
     }
 }
+
 
 @Composable
 fun BottomBar(navController: NavHostController) {
     val screens = listOf(
         BottomBarScreen.Home,
-        BottomBarScreen.Profile,
-        BottomBarScreen.Settings,
+        BottomBarScreen.Recipes,
+        BottomBarScreen.Categories,
     )
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
 
-//    BottomNavigation (
-//        modifier = Modifier.background(color = Color(0xFF2196F3)),
-//    ) {
-//
-//        screens.forEach { screen ->
-//            AddItem(
-//                screen = screen,
-//                currentDestination = currentDestination,
-//                navController = navController
-//            )
-//        }
-//    }
     BottomNavigation (
         modifier = Modifier.height(70.dp) ,
         backgroundColor = Color(android.graphics.Color.parseColor("#f06d0a"))
     ){
         screens.forEach { screen ->
-            BottomNavigationItem(
-                icon = {
-                    // Set your icon based on the screen
-                    Icon(imageVector = screen.icon, contentDescription = screen.title)
-                },
-                label = { Text(text = screen.title) },
-                selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true,
-                onClick = {
-                    // Handle navigation or other actions when the item is clicked
-                    navController.navigate(screen.route)
-                },
-                modifier = Modifier
-                    // Apply additional styling to the BottomNavigationItem
-                    .padding(4.dp) // Add padding as needed
-                    .fillMaxHeight(), // Adjust height as needed
-                selectedContentColor = Color.White, // Set color for the selected item
-                unselectedContentColor = Color.Gray // Set color for unselected items
+            AddItem(
+                screen = screen,
+                currentDestination = currentDestination,
+                navController = navController
             )
         }
     }
-
 }
+
 
 @Composable
 fun RowScope.AddItem(
@@ -133,21 +173,22 @@ fun RowScope.AddItem(
         label = {
             Text(text = screen.title)
         },
+        selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true,
+        unselectedContentColor = LocalContentColor.current.copy(alpha = ContentAlpha.disabled),
         icon = {
+
             Icon(
-                imageVector = screen.icon,
-                contentDescription = "Navigation Icon"
+                painter = painterResource(id = screen.icon),
+                contentDescription = "Navigation Icon",
+                modifier = Modifier.size(35.dp),
             )
         },
-        selected = currentDestination?.hierarchy?.any {
-            it.route == screen.route
-        } == true,
-        unselectedContentColor = LocalContentColor.current.copy(alpha = ContentAlpha.disabled),
         onClick = {
             navController.navigate(screen.route) {
                 popUpTo(navController.graph.findStartDestination().id)
                 launchSingleTop = true
             }
-        }
+        },
     )
 }
+

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "157619645604",
+    "project_id": "fir-authentication-bc633",
+    "storage_bucket": "fir-authentication-bc633.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:157619645604:android:b896e38b1de0ca51bf4a31",
+        "android_client_info": {
+          "package_name": "com.example.recipebook"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDH5OuGYYCcfuZ1YQxu4RkaGAFMhbFSr9s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
