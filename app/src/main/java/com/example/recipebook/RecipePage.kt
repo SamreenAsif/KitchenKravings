@@ -1,6 +1,5 @@
 package com.example.recipebook
 
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,44 +18,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.example.recipebook.data.recipecard
-//@Composable
-//fun RecipePage(recipes: List<recipecard>, numColumns: Int? = null) {
-//    Surface(
-//        modifier = Modifier
-//            .fillMaxSize()
-//            .padding(2.dp),
-//        color = Color.White, // Set the background color
-//        elevation = 4.dp
-//    ) {
-//
-//        Column(
-//            modifier = Modifier
-//                .padding(2.dp),
-//            verticalArrangement = Arrangement.spacedBy(30.dp),
-//            horizontalAlignment = Alignment.CenterHorizontally,
-//        ) {
-//
-//            LazyVerticalGrid(
-//                columns = if (numColumns != null) {
-//                    GridCells.Fixed(numColumns)
-//                } else {
-//                    GridCells.Adaptive(minSize = 160.dp)
-//                },
-//                contentPadding = PaddingValues(horizontal = 8.dp, vertical = 8.dp),
-//                verticalArrangement = Arrangement.spacedBy(3.dp),
-//                horizontalArrangement = Arrangement.spacedBy(0.dp)
-//            ) {
-//                items(recipes) { recipe ->
-//                    RecipeCard(data = recipe)
-//                }
-//            }
-//        }
-//    }
-//}
+
 
 @Composable
-fun RecipePage(recipes: List<recipecard>, numColumns: Int? = null, maxHeight: Dp? = Dp.Unspecified) {
+fun RecipePage(
+    recipes: List<recipecard>,
+    navController: NavController,
+    numColumns: Int? = null,
+    maxHeight: Dp? = Dp.Unspecified
+) {
     Surface(
         modifier = Modifier
             .fillMaxSize()
@@ -90,7 +62,7 @@ fun RecipePage(recipes: List<recipecard>, numColumns: Int? = null, maxHeight: Dp
                         horizontalArrangement = Arrangement.spacedBy(0.dp)
                     ) {
                         items(recipes) { recipe ->
-                            RecipeCard(data = recipe)
+                            RecipeCard(data = recipe , navController)
                         }
                     }
                 }

@@ -1,12 +1,13 @@
 package com.example.recipebook
 
 import androidx.compose.runtime.Composable
+import androidx.navigation.NavController
 import com.example.recipebook.data.recipecard
 
 @Composable
-fun RecipesScreen()
+fun RecipesScreen(navController: NavController)
 {
-    RecipePage(recipes = recipes)
+    RecipePage(recipes = recipes , navController)
 }
 
 val recipes: List<recipecard> = listOf(

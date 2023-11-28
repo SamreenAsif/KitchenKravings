@@ -10,9 +10,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
@@ -74,55 +71,62 @@ fun MainScreen() {
                             id = "courses",
                             title = "Courses",
                             contentDescription = "Go to settings screen",
-                            icon = R.drawable.cooking
+                            icon = R.drawable.courses
                         ),
                         MenuItem(
                             id = "cuisine",
                             title = "Cuisine",
                             contentDescription = "Get help",
-                            icon = R.drawable.cooking
+                            icon = R.drawable.cuisine
                         ),
                         MenuItem(
                             id = "vegetarian",
                             title = "Vegetarian",
                             contentDescription = "Get help",
-                            icon = R.drawable.cooking
+                            icon = R.drawable.vegan
                         ),
                         MenuItem(
                             id = "non-veg",
                             title = "Non-Veg",
                             contentDescription = "Get help",
-                            icon = R.drawable.cooking
+                            icon = R.drawable.nonveg
+
                         ),
                         MenuItem(
                             id = "healthy",
                             title = "Healthy",
                             contentDescription = "Get help",
-                            icon = R.drawable.cooking
+                            icon = R.drawable.healthyfood1
                         ),
                         MenuItem(
                             id = "bakery",
                             title = "Bakery",
                             contentDescription = "Get help",
-                            icon = R.drawable.cupcake
+                            icon = R.drawable.bakery2
                         ),
                         MenuItem(
                             id = "desserts",
                             title = "Desserts",
                             contentDescription = "Get help",
-                            icon = R.drawable.cupcake
+                            icon = R.drawable.sweets
                         ),
                         MenuItem(
                             id = "logout",
                             title = "Logout",
                             contentDescription = "Get help",
-                            icon = R.drawable.recipe1
+                            icon = R.drawable.logout2
                         ),
                     ),
-
-                    onItemClick = {
-                        println("Clicked on ${it.title}")
+                    onItemClick = { menuItem ->
+                        when (menuItem.id) {
+                            "categories" -> navController.navigate(BottomBarScreen.Categories.route)
+//                            "courses" -> navController.navigate(Screen.Courses.route)
+//                            "cuisine" -> navController.navigate(Screen.Cuisine.route)
+                            // Repeat the above for other menu items
+//                            "logout" -> navController.navigate(Screen.Logout.route)
+                        }
                     }
+
                 )
             }
         } ,
@@ -138,8 +142,8 @@ fun MainScreen() {
 fun BottomBar(navController: NavHostController) {
     val screens = listOf(
         BottomBarScreen.Home,
-        BottomBarScreen.Profile,
-        BottomBarScreen.Settings,
+        BottomBarScreen.Recipes,
+        BottomBarScreen.Categories,
     )
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination

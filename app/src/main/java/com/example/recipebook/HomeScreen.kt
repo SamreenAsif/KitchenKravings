@@ -14,31 +14,29 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.recipebook.data.ItemCategory
 import com.example.recipebook.data.recipecard
 
 
 @Composable
-fun HomeScreen() {
+fun HomeScreen(navController: NavController) {
     LazyColumn(
         modifier = Modifier.padding(12.dp)
     ) {
         item {
-            searchBox()
+            SearchBox()
         }
-
         item {
             Surface(){
                 MainRecipeCard(data = highlightRecipe)
             }
 
         }
-        
         item{
-            displayRecipeGrid()
+            DisplayRecipeGrid(navController)
         }
         item{
             Column(){
@@ -65,7 +63,7 @@ fun HomeScreen() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun searchBox(){
+fun SearchBox(){
     Box(
         modifier = Modifier.height(100.dp)
             .fillMaxWidth()
@@ -114,8 +112,8 @@ val recipeList: List<recipecard> = listOf(
 )
 
 @Composable
-fun displayRecipeGrid(){
-    RecipePage(recipes = recipeList , 2 , 450.dp)
+fun DisplayRecipeGrid(navController: NavController) {
+    RecipePage(recipes = recipeList ,navController, 2 , 450.dp)
 }
 //---------------------------------------Component 3
 val recipeItems = listOf(
@@ -132,10 +130,3 @@ val recipeItems = listOf(
     // Add more items as needed
 )
 
-
-//------------------------------------
-@Composable
-@Preview
-fun HomeScreenPreview() {
-    HomeScreen()
-}

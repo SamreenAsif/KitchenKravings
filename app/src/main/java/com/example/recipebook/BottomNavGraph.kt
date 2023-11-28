@@ -14,13 +14,16 @@ fun BottomNavGraph(navController: NavHostController , modifier : Modifier) {
         startDestination = BottomBarScreen.Home.route
     ) {
         composable(route = BottomBarScreen.Home.route) {
-            HomeScreen()
+            HomeScreen(navController)
         }
-        composable(route = BottomBarScreen.Profile.route) {
-            RecipesScreen()
+        composable(route = BottomBarScreen.Recipes.route) {
+            RecipesScreen(navController = navController)
         }
-        composable(route = BottomBarScreen.Settings.route) {
+        composable(route = BottomBarScreen.Categories.route) {
             CategoryScreen()
+        }
+        composable(route = "videoPage") {
+            VideoPage(navController = navController)
         }
     }
 }

@@ -2,7 +2,6 @@ package com.example.recipebook
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -36,17 +35,18 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.recipebook.data.recipecard
 
 @Composable
-fun RecipeCard (data : recipecard) {
+fun RecipeCard (data : recipecard, navController: NavController) {
     var isLiked by remember { mutableStateOf(false) }
 
     Card(
         modifier = Modifier
             .padding(8.dp)
             .clickable {
-                // Handle the click event
+                navController.navigate("videoPage")
             },
         elevation = 4.dp,
         backgroundColor = Color.White,
@@ -87,7 +87,7 @@ fun RecipeCard (data : recipecard) {
                     .padding(8.dp)
             ) {
                 Text(
-                    text = "${data.name}",
+                    text = data.name,
                     fontWeight = FontWeight.Light,
                     fontSize = 14.sp,
                     color = Color.Black,
@@ -100,9 +100,4 @@ fun RecipeCard (data : recipecard) {
         }
 
     }
-}
-
-@Composable
-fun recipetop(Img : Int){
-
 }
