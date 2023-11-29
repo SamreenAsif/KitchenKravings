@@ -6,10 +6,13 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -20,11 +23,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.example.recipebook.data.ItemCategory
-
 
 @Composable
 fun CategoryButton (
@@ -34,23 +37,22 @@ fun CategoryButton (
     min : Dp? = 110.dp
 ){
     Column(
-        modifier = Modifier.padding(bottom=30.dp)
-        ,
-
+        modifier = Modifier
+           ,
         verticalArrangement = Arrangement.spacedBy(50.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
-    ){
+    ) {
         maxHeight?.let {
-                Modifier
-                    .fillMaxWidth()
-                    .height(it)
-            }?.let {
+            Modifier
+                .fillMaxWidth()
+                .height(it)
+        }?.let {
             Box(
                 modifier = it // Set the provided maxHeight or the default value
             ) {
-                min?.let { it1 -> GridCells.Adaptive(minSize = it1) }?.let { it2 ->
+                min?.let { minSize ->
                     LazyVerticalGrid(
-                        columns = it2,
+                        columns = GridCells.Fixed(numColumns ?: 3), // Set the desired number of columns
                         contentPadding = PaddingValues(horizontal = 12.dp, vertical = 8.dp),
                         verticalArrangement = Arrangement.spacedBy(10.dp),
                         horizontalArrangement = Arrangement.spacedBy(10.dp)
@@ -64,11 +66,15 @@ fun CategoryButton (
         }
     }
 }
+
+
+
+
 @Composable
 fun ElevatedButtonExample(items: ItemCategory) {
     ElevatedCard(
         elevation = CardDefaults.cardElevation(
-            defaultElevation = 8.dp
+            defaultElevation = 6.dp
         ),
         modifier = Modifier
             .size(width = 150.dp, height = 110.dp),
@@ -84,7 +90,6 @@ fun ElevatedButtonExample(items: ItemCategory) {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(5.dp)
-//                .border(1.dp , Color.Black)
         ) {
 
             // Create icon using the img variable passed to it
