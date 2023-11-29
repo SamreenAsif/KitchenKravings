@@ -36,10 +36,12 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.recipebook.data.recipecard
 
 @Composable
 fun RecipeCard (data : recipecard, navController: NavController) {
+
     var isLiked by remember { mutableStateOf(false) }
 
     Card(
@@ -52,6 +54,7 @@ fun RecipeCard (data : recipecard, navController: NavController) {
         backgroundColor = Color.White,
         shape = MaterialTheme.shapes.medium
     ) {
+
         Column() {
             Box {
                 Image(
