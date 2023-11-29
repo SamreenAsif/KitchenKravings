@@ -12,7 +12,6 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Favorite
@@ -30,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -54,10 +54,14 @@ fun VideoPage(navController: NavController) {
     var shareClicked by remember { mutableStateOf(false) }
     val context = LocalContext.current
 
-
     Scaffold(
+        containerColor = Color.White,
         topBar = {
             TopAppBar(
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = Color.White,
+                    titleContentColor = Color.Black,
+                ),
                 title = {},
                 navigationIcon = {
                         Icon(
@@ -65,7 +69,8 @@ fun VideoPage(navController: NavController) {
                             contentDescription = "Back",
                             modifier = Modifier.clickable {
                                 navController.popBackStack()
-                            }
+                            },
+                            tint = Color.Black
                         )
 
                     },
@@ -78,7 +83,8 @@ fun VideoPage(navController: NavController) {
                             .padding(end = 16.dp)
                             .clickable {
                                 shareClicked = true
-                            }
+                            },
+                        tint = Color.Black
                     )
 
                     // Like (heart) icon
@@ -91,84 +97,105 @@ fun VideoPage(navController: NavController) {
                                 isLiked = !isLiked
                                 // Handle like button click if needed
                             }
+                        ,
+                        tint = Color.Black
                     )
                 }
             )
         },
         content = {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(16.dp)
-            ) {
-                // Ingredients list
-                Text(
-                    text = "Italian Double Cheese Pizza",
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    color = Color.Black,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 20.sp
-                )
+            PageContent(ingredientsList, directionsList)
+        },
 
-                // Video
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(200.dp)
-                        .clip(MaterialTheme.shapes.medium)
-                ) {
-                    PlayVideo()
-                }
-
-                // Ingredients list
-                Spacer(modifier = Modifier.height(16.dp))
-                Text(
-                    text = "Italian Double Cheese Pizza",
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    color = Color.Black,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 20.sp
-                )
-
-                // Coupon for Ingredients
-                Spacer(modifier = Modifier.height(16.dp))
-                Coupon(
-                    title = "Ingredients",
-                    points = ingredientsList
-                )
-
-                // Coupon for Directions
-                Spacer(modifier = Modifier.height(16.dp))
-                Coupon(
-                    title = "Directions",
-                    points = directionsList
-                )
-
-                // Add to Grocery List button
-                Spacer(modifier = Modifier.height(20.dp))
-                Button(
-                    onClick = {
-                        // Handle "Add to Grocery List" button click
-                    },
-                    modifier = Modifier
-                        .align(Alignment.CenterHorizontally)
-                        .width(190.dp)
-                ) {
-                    Text("Add to Grocery List")
-                }
-
-                // Launch the effect when the share icon is clicked
-                LaunchedEffect(shareClicked) {
-                    if (shareClicked) {
-                        shareOnWhatsApp(context)
-                        shareClicked = false // Reset the state
-                    }
-                }
+    )
+            // Launch the effect when the share icon is clicked
+        LaunchedEffect(shareClicked) {
+            if (shareClicked) {
+                shareOnWhatsApp(context)
+                shareClicked = false // Reset the state
             }
         }
-    )
+
+}
+
+@Composable
+fun PageContent(ingredientsList:List<String> , directionsList : List<String>){
+
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+    ) {
+        // Ingredients list
+        item {
+            Text(
+                text = "Italian Double Cheese Pizza",
+                modifier = Modifier
+                    .fillMaxWidth(),
+                color = Color.Black,
+                fontWeight = FontWeight.Bold,
+                fontSize = 20.sp
+            )
+        }
+
+        // Video
+        item {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(200.dp)
+                    .clip(MaterialTheme.shapes.medium)
+            ) {
+                PlayVideo()
+            }
+        }
+
+        // Ingredients list
+        item {
+            Spacer(modifier = Modifier.height(16.dp))
+            Text(
+                text = "Italian Double Cheese Pizza",
+                modifier = Modifier
+                    .fillMaxWidth(),
+                color = Color.Black,
+                fontWeight = FontWeight.Bold,
+                fontSize = 20.sp
+            )
+        }
+
+        // Coupon for Ingredients
+        item {
+            Spacer(modifier = Modifier.height(16.dp))
+            Coupon(
+                title = "Ingredients",
+                points = ingredientsList
+            )
+        }
+
+        // Coupon for Directions
+        item {
+            Spacer(modifier = Modifier.height(16.dp))
+            Coupon(
+                title = "Directions",
+                points = directionsList
+            )
+        }
+
+        // Add to Grocery List button
+        item {
+            Spacer(modifier = Modifier.height(20.dp))
+            Button(
+                onClick = {
+                    // Handle "Add to Grocery List" button click
+                },
+                modifier = Modifier
+                   .width(190.dp)
+            ) {
+                Text("Add to Grocery List")
+            }
+        }
+    }
+
 }
 fun shareOnWhatsApp(context: Context) {
     val textToShare = "Check out this amazing recipe!"
@@ -201,8 +228,11 @@ fun Coupon(title: String, points: List<String>) {
     ) {
         Text(text = title, color = Color.Black)
 
-        LazyColumn {
-            items(points) { point ->
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+        ) {
+            points.forEach { point ->
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -217,6 +247,7 @@ fun Coupon(title: String, points: List<String>) {
         }
     }
 }
+
 
 @Composable
 fun YouTubePlayer(videoId: String) {

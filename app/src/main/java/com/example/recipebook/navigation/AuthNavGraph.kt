@@ -1,5 +1,7 @@
 ﻿package com.example.recipebook.navigation
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
@@ -11,6 +13,7 @@ import com.example.recipebook.presentation.login_screen.SignInScreen
 import com.example.recipebook.presentation.signup_screen.SignUpScreen
 import dagger.hilt.android.lifecycle.HiltViewModel
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun AuthNavGraph(
     navController: NavHostController = rememberNavController(),
