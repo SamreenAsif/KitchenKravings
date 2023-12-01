@@ -5,5 +5,4 @@ sealed class Screens(val route: String) {
     object SignUpScreen : Screens(route = "SignUp_Screen")
     object MainScreen : Screens(route = "Main_Screen")
 
-
 }

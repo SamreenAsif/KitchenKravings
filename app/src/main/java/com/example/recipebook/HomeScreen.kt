@@ -2,10 +2,12 @@ package com.example.recipebook
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.Button
 import androidx.compose.material.Surface
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
@@ -24,7 +26,8 @@ import com.example.recipebook.data.recipecard
 @Composable
 fun HomeScreen(navController: NavController) {
     LazyColumn(
-        modifier = Modifier.padding(12.dp)
+        modifier = Modifier.padding(12.dp) ,
+        contentPadding = PaddingValues(top=10.dp ,bottom = 70.dp)
     ) {
         item {
             SearchBox()
@@ -55,7 +58,11 @@ fun HomeScreen(navController: NavController) {
                 CategoryButton(recipeItems , 3 ,400.dp , 80.dp)
             }
         }
-
+        item{
+                Button(onClick = { navController.navigate("addRecipe")}) {
+                    Text("Become Chef")
+                }
+            }
         // Add more items as needed
     }
 }
