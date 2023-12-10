@@ -124,7 +124,8 @@ fun RecipeCard(data: Recipe, navController: NavController) {
         modifier = Modifier
             .padding(8.dp)
             .clickable {
-                navController.navigate("videoPage")
+//                navController.navigate("videoPage")
+                navController.navigate("videoPage/${data.id}")
             },
         elevation = 4.dp,
         backgroundColor = Color.White,
@@ -172,13 +173,13 @@ fun RecipeCard(data: Recipe, navController: NavController) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(8.dp)
+                    .padding(12.dp)
             ) {
                 data.title?.let {
                     Text(
                         text = it,
                         fontWeight = FontWeight.Light,
-                        fontSize = 14.sp,
+                        fontSize = 16.sp,
                         color = Color.Black,
                         overflow = TextOverflow.Ellipsis,
                         maxLines = 1,
@@ -191,31 +192,3 @@ fun RecipeCard(data: Recipe, navController: NavController) {
     }
 }
 
-//@Composable
-//fun GlideImage(
-//    data: String?,
-//    contentDescription: String?,
-//    modifier: Modifier = Modifier,
-//    contentScale: ContentScale = ContentScale.Crop
-//) {
-//    val requestOptions = RequestOptions()
-//        .placeholder(R.drawable.recipe1) // Placeholder image while loading
-//
-//
-//    Image(
-//        painter = rememberGlidePainter(request = data, requestOptions = requestOptions),
-//        contentDescription = contentDescription,
-//        modifier = modifier,
-//        contentScale = contentScale
-//    )
-//}
-
-suspend fun getDownloadUrlFromStorage(uri: Uri): String? {
-    val storageRef = FirebaseStorage.getInstance().reference
-    return try {
-        storageRef.child(uri.pathSegments.joinToString("/")).downloadUrl.await().toString()
-    } catch (e: Exception) {
-        // Handle the exception appropriately
-        null
-    }
-}

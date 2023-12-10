@@ -613,6 +613,7 @@ import coil.compose.AsyncImage
 import coil.compose.rememberImagePainter
 import com.example.recipebook.util.StorageUtil
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -633,6 +634,7 @@ import kotlinx.coroutines.withContext
 
 import java.io.Serializable
 data class Recipe(
+    var id: String? = null,
     val title: String? = null,
     val coverImageUri: String? = null, // Store URI as String
     val description: String? = null,
@@ -673,8 +675,10 @@ fun AddRecipeScreen(onRecipeAdded: (Recipe) -> Unit) {
     val context = LocalContext.current
     val activity = LocalContext.current as? ComponentActivity
 
-    val database = FirebaseDatabase.getInstance()
-    val recipesRef = database.getReference("recipes")
+
+    val recipesRef = FirebaseDatabase.getInstance().getReference("recipes")
+
+
     val coroutineScope = rememberCoroutineScope()
 
     var uri by remember{
@@ -948,97 +952,61 @@ fun AddRecipeScreen(onRecipeAdded: (Recipe) -> Unit) {
                 }
 
                 // Add Recipe Button
-//                item {
-//                    Button(
-//                        onClick = {
-//                            if (isIngredientsAdded && isDirectionsAdded) {
-//                                val recipe = Recipe(
-//                                    title = title,
-//                                    coverImageUri = uri,
-//                                    description = description,
-//                                    cookingTime = cookingTime,
-//                                    servings = servings,
-////                                    videoUri = videoUri,
-//                                    ingredients = ingredients,
-//                                    directions = directions,
-//                                    category = selectedCategory
-//                                )
-//                                // Push the recipe data to the "recipes" node
-//                                val newRecipeRef = recipesRef.push()
-//                                newRecipeRef.setValue(recipe)
-//
-//                                onRecipeAdded(recipe)
-//                                isDialogVisible = true
-//                                uri?.let{
-//                                    StorageUtil.uploadToStorage(uri=it, context=context, type="image")
-//                                }
-//                            } else {
-//                                showVideoError = !isVideoAdded
-//                                showIngredientsError = !isIngredientsAdded
-//                                showDirectionsError = !isDirectionsAdded
-//                            }
-//                        },
-//                        modifier = Modifier
-//                            .fillMaxWidth()
-//                            .height(50.dp)
-//                    ) {
-//                        Text("Add Recipe")
-//                    }
-//                }
                 item {
                     Button(
                         onClick = {
                             coroutineScope.launch {
-                                if (uri == null) {
-                                    val uriString = uri?.toString() ?: "URI is null"
-                                    Toast.makeText(context, "Selected URI: $uriString", Toast.LENGTH_SHORT).show()
-                                    Log.e("AddRecipeScreen", "Error: Unable to process URI - $uriString")
-                                }
-                                if (isIngredientsAdded && isDirectionsAdded) {
-                                    val recipe = Recipe(
-                                        title = title,
-                                        coverImageUri = uri?.toString(),
-                                        description = description,
-                                        cookingTime = cookingTime,
-                                        servings = servings,
-                                        ingredients = ingredients,
-                                        directions = directions,
-                                        category = selectedCategory
-                                    )
+                                // Check if image is added
+                                if (isImageAdded && isIngredientsAdded && isDirectionsAdded) {
+                                    // Convert the content URI to Firebase Storage URL
+                                    uri?.let { imageuri ->
+                                        val imageUrl = StorageUtil.uploadToStorage(imageuri, context, "image")
+                                        // Check if the image upload was successful
+                                        if (imageUrl.isNotEmpty()) {
+                                            // Create the Recipe object with the Firebase Storage URL
+                                            val recipe = Recipe(
+                                                title = title,
+                                                coverImageUri = imageUrl,
+                                                description = description,
+                                                cookingTime = cookingTime,
+                                                servings = servings,
+                                                ingredients = ingredients,
+                                                directions = directions,
+                                                category = selectedCategory
+                                            )
 
-                                    try {
-                                        // Push the recipe data to the "recipes" node asynchronously
-//                                        withContext(Dispatchers.IO) {
-//                                            recipesRef.push().setValue(recipe)
-//                                        }
-                                        withContext(Dispatchers.IO) {
-                                            recipesRef.push().setValue(recipe)
-                                                .addOnCompleteListener { task ->
-                                                    if (task.isSuccessful) {
-                                                        // Handle success
-                                                    } else {
-                                                        // Handle failure
-                                                        val exception = task.exception
-                                                        Log.e("FirebaseException", "Error setting value in the database", exception)
-                                                    }
-                                                }
-                                        }
-
-                                        // Notify the UI that the recipe has been added
-                                        onRecipeAdded(recipe)
-                                        isDialogVisible = true
-
-                                        // Upload the image to storage asynchronously
-                                        uri?.let {
+                                            // Push the recipe data to the "recipes" node asynchronously
                                             withContext(Dispatchers.IO) {
-                                                StorageUtil.uploadToStorage(uri = it, context = context, type = "image")
+                                                try {
+                                                    val newRecipeRef = recipesRef.push()
+                                                    val recipeId = newRecipeRef.key ?: ""
+                                                    recipe.id = recipeId
+                                                    newRecipeRef.setValue(recipe)
+                                                        .addOnCompleteListener { task ->
+                                                            if (task.isSuccessful) {
+                                                                // Handle success
+                                                            } else {
+                                                                // Handle failure
+                                                                val exception = task.exception
+                                                                Log.e("FirebaseException", "Error setting value in the database", exception)
+                                                            }
+                                                        }
+                                                } catch (e: Exception) {
+                                                    // Handle exceptions if needed
+                                                    // For example, you can log the error or show an error message to the user
+                                                }
                                             }
+
+                                            // Notify the UI that the recipe has been added
+                                            onRecipeAdded(recipe)
+                                            isDialogVisible = true
+                                        } else {
+                                            // Show an error message or handle the case when image upload fails
+                                            Toast.makeText(context, "Image upload failed", Toast.LENGTH_SHORT).show()
                                         }
-                                    } catch (e: Exception) {
-                                        // Handle exceptions if needed
-                                        // For example, you can log the error or show an error message to the user
                                     }
                                 } else {
+                                    // Show error messages or take appropriate action
                                     showVideoError = !isVideoAdded
                                     showIngredientsError = !isIngredientsAdded
                                     showDirectionsError = !isDirectionsAdded

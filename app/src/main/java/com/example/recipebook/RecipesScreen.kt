@@ -31,6 +31,12 @@ fun RecipesScreen(navController: NavController) {
                     dataSnapshot.getValue(Recipe::class.java)
                 }
                 recipes = newRecipes
+                // Load images using an image loading library
+//                recipes.forEach { recipe ->
+//                    // Use an image loading library to load the image from the URL
+//                    // Example using Coil:
+//                    loadImage(recipe.coverImageUri)
+//                }
             }
 
             override fun onCancelled(error: DatabaseError) {

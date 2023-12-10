@@ -3,6 +3,7 @@ package com.example.recipebook
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import android.view.ViewGroup
 import android.webkit.WebView
 import android.webkit.WebViewClient
@@ -29,13 +30,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun VideoPage(navController: NavController) {
-
+fun VideoPage(navController: NavController, recipeId: String?) {
+    if (recipeId != null) {
+        Log.d("RecipeId" , recipeId + "inside video")
+    }
+    else
+        Log.d("RecipeId" , "recipeid is null")
     val ingredientsList = listOf(
         "Cooking oil 1tbs",
         "Chicken boneless Small cubes 100g",

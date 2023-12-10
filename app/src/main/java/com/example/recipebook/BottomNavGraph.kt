@@ -1,4 +1,5 @@
 package com.example.recipebook
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
@@ -22,10 +23,20 @@ fun BottomNavGraph(navController: NavHostController , modifier : Modifier) {
         composable(route = BottomBarScreen.Categories.route) {
             CategoryScreen()
         }
-        composable(route = "videoPage") {
-            VideoPage(navController = navController)
+//        composable(route = "videoPage") {
+//            VideoPage(navController = navController)
+//        }
+        composable(route = "videoPage/{recipeId}") { backStackEntry ->
+            val recipeId = backStackEntry.arguments?.getString("recipeId")
+            if (recipeId != null) {
+                Log.d("RecipeId" , recipeId)
+            }
+            else
+                Log.d("RecipeId" , "recipeid is null")
+
+            VideoPage(navController = navController, recipeId = recipeId)
         }
-        composable(route = "addRecipe") {
+            composable(route = "addRecipe") {
             AddRecipeScreen(onRecipeAdded ={ /* Handle recipe added */ })
         }
         composable(route = "getRecipe") {
