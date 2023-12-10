@@ -24,7 +24,7 @@ import com.example.recipebook.data.recipecard
 
 @Composable
 fun RecipePage(
-    recipes: List<recipecard>,
+    recipes: List<Recipe>,
     navController: NavController,
     numColumns: Int? = null,
     maxHeight: Dp? = Dp.Unspecified

@@ -28,5 +28,8 @@ fun BottomNavGraph(navController: NavHostController , modifier : Modifier) {
         composable(route = "addRecipe") {
             AddRecipeScreen(onRecipeAdded ={ /* Handle recipe added */ })
         }
+        composable(route = "getRecipe") {
+            RecipeListScreen()
+        }
     }
 }

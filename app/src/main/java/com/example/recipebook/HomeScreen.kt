@@ -21,6 +21,8 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.recipebook.data.ItemCategory
 import com.example.recipebook.data.recipecard
+import com.google.firebase.Firebase
+import com.google.firebase.database.database
 
 
 @Composable
@@ -33,14 +35,11 @@ fun HomeScreen(navController: NavController) {
             SearchBox()
         }
         item {
-            Surface(){
                 MainRecipeCard(data = highlightRecipe)
-            }
-
         }
-        item{
-            DisplayRecipeGrid(navController)
-        }
+//        item{
+//            DisplayRecipeGrid(navController)
+//        }
         item{
             Column(){
                 Text(
@@ -63,6 +62,12 @@ fun HomeScreen(navController: NavController) {
                     Text("Become Chef")
                 }
             }
+
+        item{
+            Button(onClick = { navController.navigate("getRecipe")}) {
+                Text("Get Recipe")
+            }
+        }
         // Add more items as needed
     }
 }
@@ -118,10 +123,10 @@ val recipeList: List<recipecard> = listOf(
     ),
 )
 
-@Composable
-fun DisplayRecipeGrid(navController: NavController) {
-    RecipePage(recipes = recipeList ,navController, 2 , 450.dp)
-}
+//@Composable
+//fun DisplayRecipeGrid(navController: NavController) {
+//    RecipePage(recipes = recipeList ,navController, 2 , 450.dp)
+//}
 //---------------------------------------Component 3
 val recipeItems = listOf(
     ItemCategory(title = "Breakfast", imgResId = R.drawable.englishbreakfast),
