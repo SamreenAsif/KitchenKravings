@@ -23,9 +23,7 @@ fun BottomNavGraph(navController: NavHostController , modifier : Modifier) {
         composable(route = BottomBarScreen.Categories.route) {
             CategoryScreen()
         }
-//        composable(route = "videoPage") {
-//            VideoPage(navController = navController)
-//        }
+
         composable(route = "videoPage/{recipeId}") { backStackEntry ->
             val recipeId = backStackEntry.arguments?.getString("recipeId")
             if (recipeId != null) {
@@ -34,7 +32,7 @@ fun BottomNavGraph(navController: NavHostController , modifier : Modifier) {
             else
                 Log.d("RecipeId" , "recipeid is null")
 
-            VideoPage(navController = navController, recipeId = recipeId)
+            RecipeDetailsScreen(navController = navController, recipeId = recipeId)
         }
             composable(route = "addRecipe") {
             AddRecipeScreen(onRecipeAdded ={ /* Handle recipe added */ })

@@ -30,43 +30,50 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavController
+import com.example.recipebook.firebaselogic.fetchRecipeById
+@Composable
+fun RecipeDetailsScreen(navController: NavController, recipeId: String?) {
+    // State to hold the fetched recipe
+    var recipe by remember { mutableStateOf<Recipe?>(null) }
 
+    // Fetch the recipe by ID
+    if (recipeId != null) {
+        fetchRecipeById(recipeId) { fetchedRecipe ->
+            // Update the state with the fetched recipe
+            recipe = fetchedRecipe
+        }
+    }
+    else
+        Toast.makeText(LocalContext.current , "Recipe not found" , Toast.LENGTH_LONG)
+
+    // Display the recipe details if recipe found
+    recipe?.let { RecipeDetails(navController,it) }
+}
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun VideoPage(navController: NavController, recipeId: String?) {
-    if (recipeId != null) {
-        Log.d("RecipeId" , recipeId + "inside video")
-    }
-    else
-        Log.d("RecipeId" , "recipeid is null")
-    val ingredientsList = listOf(
-        "Cooking oil 1tbs",
-        "Chicken boneless Small cubes 100g",
-        "Adrak Lehsan paste",
-        "Tandori Masla 1tbs",
-        "Pizza sauce"
-    )
+fun RecipeDetails(navController: NavController ,recipe :Recipe) {
 
-    val directionsList = listOf(
-        "In a frying pan, add cooking oil, chicken and mix well until it changes color ",
-        "Add ginger garlic paste",
-        "Bake at a preheated oven at 180C until cheese melts(10 minutes)",
-        "Serve hot",
-    )
+
     var isLiked by remember { mutableStateOf(false) }
     var shareClicked by remember { mutableStateOf(false) }
     val context = LocalContext.current
+    val ingredientsList = recipe.ingredients
+    val directionsList = recipe.directions
+    val title = recipe.title
+    val category = recipe.category
 
     Scaffold(
         containerColor = Color.White,
         topBar = {
-            TopAppBar(
+            CenterAlignedTopAppBar(
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = Color.White,
                     titleContentColor = Color.Black,
                 ),
-                title = {},
+                title = {
+                    Text(text = title ?: "")
+                },
                 navigationIcon = {
                         Icon(
                             imageVector = Icons.Default.ArrowBack,
@@ -108,7 +115,9 @@ fun VideoPage(navController: NavController, recipeId: String?) {
             )
         },
         content = {
-            PageContent(ingredientsList, directionsList)
+            if (ingredientsList != null && directionsList != null) {
+                PageContent(ingredientsList, directionsList)
+            }
         },
 
     )
