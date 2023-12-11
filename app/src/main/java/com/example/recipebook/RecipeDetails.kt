@@ -44,7 +44,7 @@ fun RecipeDetailsScreen(navController: NavController, recipeId: String?) {
         }
     }
     else
-        Toast.makeText(LocalContext.current , "Recipe not found" , Toast.LENGTH_LONG)
+        Toast.makeText(LocalContext.current , "Recipe not found" , Toast.LENGTH_LONG).show()
 
     // Display the recipe details if recipe found
     recipe?.let { RecipeDetails(navController,it) }
@@ -62,7 +62,7 @@ fun RecipeDetails(navController: NavController ,recipe :Recipe) {
     val directionsList = recipe.directions
     val title = recipe.title
     val category = recipe.category
-
+    val videoUrl = recipe.videoUri
     Scaffold(
         containerColor = Color.White,
         topBar = {
@@ -116,7 +116,7 @@ fun RecipeDetails(navController: NavController ,recipe :Recipe) {
         },
         content = {
             if (ingredientsList != null && directionsList != null) {
-                PageContent(ingredientsList, directionsList)
+                PageContent(ingredientsList, directionsList,videoUrl)
             }
         },
 
@@ -132,7 +132,7 @@ fun RecipeDetails(navController: NavController ,recipe :Recipe) {
 }
 
 @Composable
-fun PageContent(ingredientsList:List<String> , directionsList : List<String>){
+fun PageContent(ingredientsList:List<String> , directionsList : List<String>, url : String?){
 
     LazyColumn(
         modifier = Modifier
@@ -159,7 +159,11 @@ fun PageContent(ingredientsList:List<String> , directionsList : List<String>){
                     .height(200.dp)
                     .clip(MaterialTheme.shapes.medium)
             ) {
-                PlayVideo()
+                if (url != null) {
+                    VideoPlayerScreen(url = url)
+                }
+                else
+                    Toast.makeText(LocalContext.current , "Can't play video" , Toast.LENGTH_LONG).show()
             }
         }
 
@@ -261,26 +265,3 @@ fun Coupon(title: String, points: List<String>) {
     }
 }
 
-
-@Composable
-fun YouTubePlayer(videoId: String) {
-    val url = "https://www.youtube.com/embed/$videoId"
-
-    AndroidView(factory = { context ->
-        WebView(context).apply {
-            layoutParams = ViewGroup.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT
-            )
-            webViewClient = WebViewClient()
-            settings.javaScriptEnabled = true
-            loadUrl(url)
-        }
-    })
-}
-
-@Composable
-fun PlayVideo() {
-    val youtubeVideoId = "D0TD-7NBSyI"
-    YouTubePlayer(videoId = youtubeVideoId)
-}

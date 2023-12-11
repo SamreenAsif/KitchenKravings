@@ -636,10 +636,11 @@ import java.io.Serializable
 data class Recipe(
     var id: String? = null,
     val title: String? = null,
-    val coverImageUri: String? = null, // Store URI as String
+    val coverImageUri: String? = null,
     val description: String? = null,
     val cookingTime: String? = null,
     val servings: String? = null,
+    val videoUri: String? = null,
     val ingredients: List<String>? = null,
     val directions: List<String>? = null,
     val category: String? = null
@@ -657,11 +658,11 @@ fun AddRecipeScreen(onRecipeAdded: (Recipe) -> Unit) {
 //    var videoUri by remember { mutableStateOf<Uri?>(null) } // Use Uri type here
     var ingredientText by remember { mutableStateOf("") }
     var directionText by remember { mutableStateOf("") }
-    var category by remember { mutableStateOf("") }
+    val category by remember { mutableStateOf("") }
 
     var ingredients by remember { mutableStateOf(emptyList<String>()) }
     var directions by remember { mutableStateOf(emptyList<String>()) }
-    val YellowishOrange = Color(0xFFFFA500)
+
     var showVideoError by remember { mutableStateOf(false) }
     var showIngredientsError by remember { mutableStateOf(false) }
     var showDirectionsError by remember { mutableStateOf(false) }
@@ -673,8 +674,6 @@ fun AddRecipeScreen(onRecipeAdded: (Recipe) -> Unit) {
     var isIngredientsAdded by remember { mutableStateOf(false) }
     var isDirectionsAdded by remember { mutableStateOf(false) }
     val context = LocalContext.current
-    val activity = LocalContext.current as? ComponentActivity
-
 
     val recipesRef = FirebaseDatabase.getInstance().getReference("recipes")
 
@@ -693,7 +692,17 @@ fun AddRecipeScreen(onRecipeAdded: (Recipe) -> Unit) {
         }
     )
     //For Video picker
+    var videouri by remember{
+        mutableStateOf<Uri?>(null)
+    }
 
+    val videoPicker = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.PickVisualMedia(),
+        onResult = {
+            videouri = it
+            isVideoAdded = true
+        }
+    )
     Scaffold(
         topBar = {
             TopAppBar(
@@ -717,7 +726,7 @@ fun AddRecipeScreen(onRecipeAdded: (Recipe) -> Unit) {
                                     description = description,
                                     cookingTime = cookingTime,
                                     servings = servings,
-//                                    videoUri = videoUri,
+                                    videoUri =  videouri?.toString(),
                                     ingredients = ingredients,
                                     directions = directions,
                                     category = category
@@ -840,7 +849,14 @@ fun AddRecipeScreen(onRecipeAdded: (Recipe) -> Unit) {
                             .background(Color.LightGray)
                             .clickable {
                                 // Open video picker
-
+                                videoPicker.launch(
+                                    PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.VideoOnly)
+                                )
+                                if (videouri == null) {
+                                    val uriString = videouri?.toString() ?: "URI is null"
+                                    Toast.makeText(context, "Selected URI: $uriString", Toast.LENGTH_SHORT).show()
+                                    Log.e("Vide0Error" ,"Error: Unable to process URI after video added - $uriString")
+                                }
                             },
                         contentAlignment = Alignment.Center
                     ) {
@@ -956,26 +972,31 @@ fun AddRecipeScreen(onRecipeAdded: (Recipe) -> Unit) {
                     Button(
                         onClick = {
                             coroutineScope.launch {
-                                // Check if image is added
-                                if (isImageAdded && isIngredientsAdded && isDirectionsAdded) {
-                                    // Convert the content URI to Firebase Storage URL
-                                    uri?.let { imageuri ->
-                                        val imageUrl = StorageUtil.uploadToStorage(imageuri, context, "image")
-                                        // Check if the image upload was successful
-                                        if (imageUrl.isNotEmpty()) {
-                                            // Create the Recipe object with the Firebase Storage URL
-                                            val recipe = Recipe(
-                                                title = title,
-                                                coverImageUri = imageUrl,
-                                                description = description,
-                                                cookingTime = cookingTime,
-                                                servings = servings,
-                                                ingredients = ingredients,
-                                                directions = directions,
-                                                category = selectedCategory
-                                            )
+                                // Check if image, video, ingredients, and directions are added
+                                if (isImageAdded && isVideoAdded && isIngredientsAdded && isDirectionsAdded) {
+                                    // Convert the content URI to Firebase Storage URLs
+                                    uri?.let { imageUri ->
+                                        val imageUrl = StorageUtil.uploadToStorage(imageUri, context, "image")
 
-                                            // Push the recipe data to the "recipes" node asynchronously
+                                        videouri?.let { videoUri ->
+                                            val videoUrl = StorageUtil.uploadToStorage(videoUri, context, "video")
+
+                                            // Check if the image and video uploads were successful
+                                            if (imageUrl.isNotEmpty() && videoUrl.isNotEmpty()) {
+                                                // Create the Recipe object with the Firebase Storage URLs
+                                                val recipe = Recipe(
+                                                    title = title,
+                                                    coverImageUri = imageUrl,
+                                                    description = description,
+                                                    cookingTime = cookingTime,
+                                                    servings = servings,
+                                                    videoUri = videoUrl,
+                                                    ingredients = ingredients,
+                                                    directions = directions,
+                                                    category = selectedCategory
+                                                )
+
+                                            //     Push the recipe data to the "recipes" node asynchronously
                                             withContext(Dispatchers.IO) {
                                                 try {
                                                     val newRecipeRef = recipesRef.push()
@@ -997,12 +1018,13 @@ fun AddRecipeScreen(onRecipeAdded: (Recipe) -> Unit) {
                                                 }
                                             }
 
-                                            // Notify the UI that the recipe has been added
-                                            onRecipeAdded(recipe)
-                                            isDialogVisible = true
-                                        } else {
-                                            // Show an error message or handle the case when image upload fails
-                                            Toast.makeText(context, "Image upload failed", Toast.LENGTH_SHORT).show()
+                                                // Notify the UI that the recipe has been added
+                                                onRecipeAdded(recipe)
+                                                isDialogVisible = true
+                                            } else {
+                                                // Show an error message or handle the case when image or video upload fails
+                                                Toast.makeText(context, "Image or video upload failed", Toast.LENGTH_SHORT).show()
+                                            }
                                         }
                                     }
                                 } else {
