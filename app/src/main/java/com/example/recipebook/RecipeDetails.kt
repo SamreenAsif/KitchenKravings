@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavController
+import com.example.recipebook.data.Recipe
 import com.example.recipebook.firebaselogic.fetchRecipeById
 @Composable
 fun RecipeDetailsScreen(navController: NavController, recipeId: String?) {

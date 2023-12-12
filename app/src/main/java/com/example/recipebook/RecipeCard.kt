@@ -38,6 +38,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import coil.compose.AsyncImage
 import com.example.recipebook.data.recipecard
 
 //@Composable
@@ -112,6 +113,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.Glide
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
+import com.example.recipebook.data.Recipe
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.tasks.await
 
@@ -124,7 +126,6 @@ fun RecipeCard(data: Recipe, navController: NavController) {
         modifier = Modifier
             .padding(8.dp)
             .clickable {
-//                navController.navigate("videoPage")
                 navController.navigate("videoPage/${data.id}")
             },
         elevation = 4.dp,
@@ -134,7 +135,7 @@ fun RecipeCard(data: Recipe, navController: NavController) {
 
         Column() {
             Box {
-                // Use Glide to load the image
+
                 GlideImage(
                     model =  data.coverImageUri,
                     contentDescription = data.title,

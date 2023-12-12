@@ -5,7 +5,7 @@ package com.example.recipebook.firebaselogic
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.rememberCoroutineScope
-import com.example.recipebook.Recipe
+import com.example.recipebook.data.Recipe
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase

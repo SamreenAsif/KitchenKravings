@@ -8,10 +8,13 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Button
-import androidx.compose.material.Surface
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -20,9 +23,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.recipebook.data.ItemCategory
+import com.example.recipebook.data.Recipe
 import com.example.recipebook.data.recipecard
-import com.google.firebase.Firebase
-import com.google.firebase.database.database
+import com.example.recipebook.firebaselogic.FetchRecipesFromFirebase
 
 
 @Composable
@@ -37,9 +40,9 @@ fun HomeScreen(navController: NavController) {
         item {
                 MainRecipeCard(data = highlightRecipe)
         }
-//        item{
-//            DisplayRecipeGrid(navController)
-//        }
+        item{
+            DisplayRecipeGrid(navController)
+        }
         item{
             Column(){
                 Text(
@@ -123,10 +126,15 @@ val recipeList: List<recipecard> = listOf(
     ),
 )
 
-//@Composable
-//fun DisplayRecipeGrid(navController: NavController) {
-//    RecipePage(recipes = recipeList ,navController, 2 , 450.dp)
-//}
+@Composable
+fun DisplayRecipeGrid(navController: NavController) {
+
+    var recipes by remember { mutableStateOf(emptyList<Recipe>()) }
+    // Fetch recipes from Firebase and update the recipes state
+    recipes = FetchRecipesFromFirebase(4)
+
+    RecipePage(recipes = recipes ,navController, 2 , 450.dp,2.dp)
+}
 //---------------------------------------Component 3
 val recipeItems = listOf(
     ItemCategory(title = "Breakfast", imgResId = R.drawable.englishbreakfast),

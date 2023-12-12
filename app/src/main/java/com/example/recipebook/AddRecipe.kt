@@ -567,19 +567,15 @@ import android.annotation.SuppressLint
 import android.net.Uri
 import android.util.Log
 import android.widget.Toast
-import android.widget.VideoView
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.Image
 import androidx.compose.ui.graphics.Color
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -597,72 +593,35 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.viewinterop.AndroidView
-import androidx.core.net.toUri
 import coil.compose.AsyncImage
-import coil.compose.rememberImagePainter
+import com.example.recipebook.data.Recipe
 import com.example.recipebook.util.StorageUtil
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-
-
-//
-//data class Recipe(
-//    val title: String,
-//    val coverImageUri: String,
-//    val description: String,
-//    val cookingTime: String,
-//    val servings: String,
-//    val videoUri: String,
-//    val ingredients: List<String>,
-//    val directions: List<String>,
-//    val category: String
-//)
-
 import java.io.Serializable
-data class Recipe(
-    var id: String? = null,
-    val title: String? = null,
-    val coverImageUri: String? = null,
-    val description: String? = null,
-    val cookingTime: String? = null,
-    val servings: String? = null,
-    val videoUri: String? = null,
-    val ingredients: List<String>? = null,
-    val directions: List<String>? = null,
-    val category: String? = null
-) : Serializable
+
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddRecipeScreen(onRecipeAdded: (Recipe) -> Unit) {
     var title by remember { mutableStateOf("") }
-
     var description by remember { mutableStateOf("") }
     var cookingTime by remember { mutableStateOf("") }
     var servings by remember { mutableStateOf("") }
-//    var videoUri by remember { mutableStateOf<Uri?>(null) } // Use Uri type here
     var ingredientText by remember { mutableStateOf("") }
     var directionText by remember { mutableStateOf("") }
     val category by remember { mutableStateOf("") }
-
     var ingredients by remember { mutableStateOf(emptyList<String>()) }
     var directions by remember { mutableStateOf(emptyList<String>()) }
-
     var showVideoError by remember { mutableStateOf(false) }
     var showIngredientsError by remember { mutableStateOf(false) }
     var showDirectionsError by remember { mutableStateOf(false) }
@@ -675,11 +634,12 @@ fun AddRecipeScreen(onRecipeAdded: (Recipe) -> Unit) {
     var isDirectionsAdded by remember { mutableStateOf(false) }
     val context = LocalContext.current
 
+    // Get firebase realtime database instance
     val recipesRef = FirebaseDatabase.getInstance().getReference("recipes")
-
 
     val coroutineScope = rememberCoroutineScope()
 
+    // For Image
     var uri by remember{
         mutableStateOf<Uri?>(null)
     }
@@ -691,6 +651,7 @@ fun AddRecipeScreen(onRecipeAdded: (Recipe) -> Unit) {
             isImageAdded = true
         }
     )
+
     //For Video picker
     var videouri by remember{
         mutableStateOf<Uri?>(null)
@@ -703,6 +664,10 @@ fun AddRecipeScreen(onRecipeAdded: (Recipe) -> Unit) {
             isVideoAdded = true
         }
     )
+
+    // Create a SnackbarHostState
+    val snackbarHostState = remember { SnackbarHostState() }
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -743,11 +708,15 @@ fun AddRecipeScreen(onRecipeAdded: (Recipe) -> Unit) {
             )
         },
         content = {
+            // Add SnackbarHost to show Snackbars
+            SnackbarHost(
+                hostState = snackbarHostState,
+            )
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(16.dp),
-                contentPadding = PaddingValues(top = 30.dp, bottom = 50.dp)
+                contentPadding = PaddingValues(top = 30.dp, bottom = 200.dp)
             ) {
                 // Title Section
                 item {
@@ -1005,7 +974,14 @@ fun AddRecipeScreen(onRecipeAdded: (Recipe) -> Unit) {
                                                     newRecipeRef.setValue(recipe)
                                                         .addOnCompleteListener { task ->
                                                             if (task.isSuccessful) {
-                                                                // Handle success
+                                                                Toast.makeText(context , " INside success" , Toast.LENGTH_LONG)
+//                                                                // Show a Snackbar to notify the user
+//                                                                coroutineScope.launch {
+//                                                                    // Show a Snackbar to notify the user
+//                                                                    snackbarHostState.showSnackbar("Recipe added successfully")
+//                                                                }
+//                                                                Log.d("Snackbar" , "Snackbar inside")
+
                                                             } else {
                                                                 // Handle failure
                                                                 val exception = task.exception
@@ -1044,6 +1020,7 @@ fun AddRecipeScreen(onRecipeAdded: (Recipe) -> Unit) {
                 }
 
             }
+
         }
     )
 }

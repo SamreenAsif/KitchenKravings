@@ -19,26 +19,26 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.recipebook.data.recipecard
+import com.example.recipebook.data.Recipe
 
 
 @Composable
 fun RecipePage(
     recipes: List<Recipe>,
     navController: NavController,
-    numColumns: Int? = null,
-    maxHeight: Dp? = Dp.Unspecified
+    numColumns: Int? = 2,
+    maxHeight: Dp? = Dp.Unspecified,
+    bottompadding: Dp = 2.dp
 ) {
     Surface(
         modifier = Modifier
             .fillMaxSize()
-            .padding(2.dp),
-        color = Color.White, // Set the background color
-//        elevation = 4.dp
+            .padding(2.dp)
+            .padding(bottom= bottompadding),
+        color = Color.White,
     ) {
         Column(
             modifier = Modifier
-//                .padding(2.dp)
                 ,
             verticalArrangement = Arrangement.spacedBy(30.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
