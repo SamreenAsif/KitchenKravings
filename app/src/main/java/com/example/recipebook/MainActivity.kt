@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import com.example.recipebook.firebaselogic.CategoryInitializer
+import com.example.recipebook.navigation.AuthNavGraph
 import com.example.recipebook.ui.theme.RecipeBookTheme
 import com.google.firebase.FirebaseApp
 import dagger.hilt.android.AndroidEntryPoint
@@ -38,11 +39,12 @@ class MainActivity : ComponentActivity() {
 
                 ) {
 
-//                    AuthNavGraph()
+                    AuthNavGraph()
+
                     // Initialize categories when the app starts
                     categoryInitializer.initializeCategories()
 
-                    MainScreen()
+//                    MainScreen()
                 }
 
             }

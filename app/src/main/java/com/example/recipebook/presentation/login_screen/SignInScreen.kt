@@ -33,7 +33,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
@@ -42,10 +41,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.example.recipebook.MainScreen
 import com.example.recipebook.R
 import com.example.recipebook.navigation.Screens
-import com.example.recipebook.presentation.signup_screen.SignUpViewModel
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -162,7 +159,7 @@ fun SignInScreen(
                     if(state.value?.isSuccess?.isNotEmpty()==true){
                         val success = state.value?.isSuccess
                         Toast.makeText(context, "${success}", Toast.LENGTH_LONG).show()
-                        navController.navigate(Screens.MainScreen.route)
+                        navController.navigate(Screens.WelcomeScreen.route)
                     }
                 }
             }
