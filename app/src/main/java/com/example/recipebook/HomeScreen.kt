@@ -67,8 +67,8 @@ fun HomeScreen(navController: NavController) {
             }
 
         item{
-            Button(onClick = { navController.navigate("getRecipe")}) {
-                Text("Get Recipe")
+            Button(onClick = { navController.navigate("searchRecipe")}) {
+                Text("Search")
             }
         }
         // Add more items as needed
@@ -98,33 +98,6 @@ val highlightRecipe : recipecard =
         name = "Spaghetti Bolognese",
         desc = "Classic Italian pasta dish with rich tomato sauce and ground beef."
     )
-
-val recipeList: List<recipecard> = listOf(
-    recipecard(
-        id = 1,
-        img = R.drawable.recipe1, // Replace with your actual drawable resource ID
-        name = "Spaghetti Bolognese",
-        desc = "Classic Italian pasta dish with rich tomato sauce and ground beef."
-    ),
-    recipecard(
-        id = 1,
-        img = R.drawable.recipe1, // Replace with your actual drawable resource ID
-        name = "Spaghetti Bolognese",
-        desc = "Classic Italian pasta dish with rich tomato sauce and ground beef."
-    ),
-    recipecard(
-        id = 1,
-        img = R.drawable.recipe1, // Replace with your actual drawable resource ID
-        name = "Spaghetti Bolognese",
-        desc = "Classic Italian pasta dish with rich tomato sauce and ground beef."
-    ),
-    recipecard(
-        id = 1,
-        img = R.drawable.recipe1, // Replace with your actual drawable resource ID
-        name = "Spaghetti Bolognese",
-        desc = "Classic Italian pasta dish with rich tomato sauce and ground beef."
-    ),
-)
 
 @Composable
 fun DisplayRecipeGrid(navController: NavController) {

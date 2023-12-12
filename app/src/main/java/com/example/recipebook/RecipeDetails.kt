@@ -1,12 +1,6 @@
 package com.example.recipebook
 
 import android.annotation.SuppressLint
-import android.content.Context
-import android.content.Intent
-import android.util.Log
-import android.view.ViewGroup
-import android.webkit.WebView
-import android.webkit.WebViewClient
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
@@ -28,13 +22,13 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavController
 import com.example.recipebook.data.Recipe
 import com.example.recipebook.firebaselogic.fetchRecipeById
+
 @Composable
 fun RecipeDetailsScreen(navController: NavController, recipeId: String?) {
-    // State to hold the fetched recipe
+
     var recipe by remember { mutableStateOf<Recipe?>(null) }
 
     // Fetch the recipe by ID
@@ -50,20 +44,16 @@ fun RecipeDetailsScreen(navController: NavController, recipeId: String?) {
     // Display the recipe details if recipe found
     recipe?.let { RecipeDetails(navController,it) }
 }
+
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RecipeDetails(navController: NavController ,recipe :Recipe) {
 
-
     var isLiked by remember { mutableStateOf(false) }
     var shareClicked by remember { mutableStateOf(false) }
     val context = LocalContext.current
-    val ingredientsList = recipe.ingredients
-    val directionsList = recipe.directions
-    val title = recipe.title
-    val category = recipe.category
-    val videoUrl = recipe.videoUri
+
     Scaffold(
         containerColor = Color.White,
         topBar = {
@@ -72,9 +62,7 @@ fun RecipeDetails(navController: NavController ,recipe :Recipe) {
                     containerColor = Color.White,
                     titleContentColor = Color.Black,
                 ),
-                title = {
-                    Text(text = title ?: "")
-                },
+                title = {},
                 navigationIcon = {
                         Icon(
                             imageVector = Icons.Default.ArrowBack,
@@ -116,24 +104,22 @@ fun RecipeDetails(navController: NavController ,recipe :Recipe) {
             )
         },
         content = {
-            if (ingredientsList != null && directionsList != null) {
-                PageContent(ingredientsList, directionsList,videoUrl)
-            }
+            PageContent(recipe)
         },
 
     )
             // Launch the effect when the share icon is clicked
-        LaunchedEffect(shareClicked) {
-            if (shareClicked) {
-                shareOnWhatsApp(context)
-                shareClicked = false // Reset the state
-            }
+    LaunchedEffect(shareClicked) {
+        if (shareClicked) {
+            shareOnWhatsApp(context)
+            shareClicked = false // Reset the state
         }
+    }
 
 }
 
 @Composable
-fun PageContent(ingredientsList:List<String> , directionsList : List<String>, url : String?){
+fun PageContent(recipe: Recipe){
 
     LazyColumn(
         modifier = Modifier
@@ -141,15 +127,18 @@ fun PageContent(ingredientsList:List<String> , directionsList : List<String>, ur
             .padding(16.dp)
     ) {
         // Ingredients list
+
         item {
-            Text(
-                text = "Italian Double Cheese Pizza",
-                modifier = Modifier
-                    .fillMaxWidth(),
-                color = Color.Black,
-                fontWeight = FontWeight.Bold,
-                fontSize = 20.sp
-            )
+            recipe.title?.let {
+                Text(
+                    text = it,
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    color = Color.Black,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 20.sp
+                )
+            }
         }
 
         // Video
@@ -160,8 +149,8 @@ fun PageContent(ingredientsList:List<String> , directionsList : List<String>, ur
                     .height(200.dp)
                     .clip(MaterialTheme.shapes.medium)
             ) {
-                if (url != null) {
-                    VideoPlayerScreen(url = url)
+                if (recipe.videoUri != null) {
+                    VideoPlayerScreen(url = recipe.videoUri)
                 }
                 else
                     Toast.makeText(LocalContext.current , "Can't play video" , Toast.LENGTH_LONG).show()
@@ -184,19 +173,23 @@ fun PageContent(ingredientsList:List<String> , directionsList : List<String>, ur
         // Coupon for Ingredients
         item {
             Spacer(modifier = Modifier.height(16.dp))
-            Coupon(
-                title = "Ingredients",
-                points = ingredientsList
-            )
+            recipe.ingredients?.let {
+                Coupon(
+                    title = "Ingredients",
+                    points = it
+                )
+            }
         }
 
         // Coupon for Directions
         item {
             Spacer(modifier = Modifier.height(16.dp))
-            Coupon(
-                title = "Directions",
-                points = directionsList
-            )
+            recipe.directions?.let {
+                Coupon(
+                    title = "Directions",
+                    points = it
+                )
+            }
         }
 
         // Add to Grocery List button
@@ -214,23 +207,6 @@ fun PageContent(ingredientsList:List<String> , directionsList : List<String>, ur
         }
     }
 
-}
-fun shareOnWhatsApp(context: Context) {
-    val textToShare = "Check out this amazing recipe!"
-
-    val sendIntent = Intent().apply {
-        action = Intent.ACTION_SEND
-        putExtra(Intent.EXTRA_TEXT, textToShare)
-        type = "text/plain"
-    }
-
-    sendIntent.setPackage("com.whatsapp")
-
-    if (sendIntent.resolveActivity(context.packageManager) != null) {
-        context.startActivity(sendIntent)
-    } else {
-        Toast.makeText(context, "WhatsApp is not installed", Toast.LENGTH_SHORT).show()
-    }
 }
 
 @Composable

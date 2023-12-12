@@ -34,8 +34,11 @@ fun BottomNavGraph(navController: NavHostController , modifier : Modifier) {
 
             RecipeDetailsScreen(navController = navController, recipeId = recipeId)
         }
-            composable(route = "addRecipe") {
+        composable(route = "addRecipe") {
             AddRecipeScreen(onRecipeAdded ={ /* Handle recipe added */ })
+        }
+        composable(route = "searchRecipe") {
+            SearchTest(navController = navController)
         }
 //        composable(route = "getRecipe") {
 //            VideoTest()
