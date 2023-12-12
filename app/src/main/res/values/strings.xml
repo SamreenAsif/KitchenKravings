@@ -1,4 +1,5 @@
 <resources>
-    <string name="app_name">RecipeBook</string>
+    <string name="app_name">KitchenKravings</string>
     <string name="title_activity_main_screen">MainScreen</string>
+    <string name="web_client_id">157619645604-8tfb47jsouecbbddnusvtu62aeboeodd.apps.googleusercontent.com</string>
 </resources>

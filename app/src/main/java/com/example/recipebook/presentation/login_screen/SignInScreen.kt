@@ -45,6 +45,7 @@ import androidx.navigation.NavHostController
 import com.example.recipebook.MainScreen
 import com.example.recipebook.R
 import com.example.recipebook.navigation.Screens
+import com.example.recipebook.presentation.GoogleSignInManager
 import com.example.recipebook.presentation.signup_screen.SignUpViewModel
 import kotlinx.coroutines.launch
 
@@ -52,8 +53,8 @@ import kotlinx.coroutines.launch
 @Composable
 fun SignInScreen(
     navController: NavHostController,
-
-    viewModel: SignInViewModel = hiltViewModel()
+    googleSignInManager: GoogleSignInManager?,
+    viewModel: SignInViewModel = hiltViewModel(),
 ) {
     var email by rememberSaveable {
         mutableStateOf("")
@@ -100,6 +101,17 @@ fun SignInScreen(
             singleLine = true,
             placeholder ={ Text(text = "Password")}
         )
+        Text(
+            text = "Forgot Password?",
+            color = Color.Gray,
+            fontFamily = FontFamily.Default,
+            modifier = Modifier
+                .clickable {
+                    navController.navigate(Screens.ForgotPasswordScreen.route)
+                }
+                .fillMaxWidth()
+                .padding(end = 16.dp).align(Alignment.End)
+        )
 
         Button(onClick = {
             scope.launch {
@@ -140,7 +152,7 @@ fun SignInScreen(
             .padding(top = 10.dp),
             horizontalArrangement = Arrangement.Center)
         {
-            IconButton(onClick = { /*TODO*/ }) {
+            IconButton(onClick = { googleSignInManager!!.signIn() }) {
                 Icon(painter = painterResource(id = R.drawable.google)
                     , contentDescription = "Google Icon",
                     modifier = Modifier.size(50.dp)

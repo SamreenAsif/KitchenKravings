@@ -43,9 +43,6 @@ val Desserts = listOf(
     ItemCategory(title = "Frozen Treats", imgResId = R.drawable.icecream),
     ItemCategory(title = "Chocolate", imgResId = R.drawable.chocolate),
     ItemCategory(title = "Puddings and Custards", imgResId = R.drawable.pudding),
-
-
-    // Add more items as needed
 )
 
 val Diet = listOf(

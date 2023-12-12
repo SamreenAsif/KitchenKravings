@@ -96,8 +96,10 @@ dependencies {
     implementation("com.google.firebase:firebase-auth")
 
     implementation ("com.google.firebase:firebase-storage-ktx") // Use the latest version
+    implementation("com.google.firebase:firebase-analytics")
 
-
+    // Also add the dependency for the Google Play services library and specify its version
+    implementation("com.google.android.gms:play-services-auth:20.7.0")
     // coil for asyncImage
     implementation("io.coil-kt:coil-compose:2.3.0")
     implementation ("androidx.appcompat:appcompat:1.6.1")
