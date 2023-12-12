@@ -3,12 +3,16 @@ package com.example.recipebook.view
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -20,9 +24,14 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.recipebook.R
 import com.example.recipebook.navigation.Screens
@@ -33,28 +42,61 @@ fun WelcomeScreen(
 ) {
     var showBranding by rememberSaveable { mutableStateOf(true) }
 
-    Scaffold(modifier = Modifier) { innerPadding ->
-        Column(
-            modifier = Modifier
-                .padding(innerPadding)
-                .fillMaxWidth()
-                .verticalScroll(rememberScrollState())
-                .padding(top = 250.dp),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        )
-        {
-            AnimatedVisibility(
-                showBranding,
-                Modifier.fillMaxWidth()
-            ) {
-                Branding()
-            }
+    val backgroundImage = painterResource(id = R.drawable.homepage)
 
-            ElevatedButton(onClick = {
-                navController.navigate(Screens.MainScreen.route)
-            }) {
-                    Text("Get Started")
+
+    Scaffold(modifier = Modifier) { innerPadding ->
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+
+        ) {
+            Image(
+                painter = painterResource(id= R.drawable.homepage),
+                modifier = Modifier.fillMaxSize(),
+                contentDescription = "Background Image",
+                contentScale = ContentScale.FillBounds
+            )
+
+            Column(
+                modifier = Modifier
+                    .padding(innerPadding)
+                    .fillMaxWidth()
+                    .verticalScroll(rememberScrollState())
+                    .padding(top = 600.dp),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            )
+            {
+                AnimatedVisibility(
+                    showBranding,
+                    Modifier.fillMaxWidth()
+                ) {
+                    //Branding()
+                }
+
+                ElevatedButton(onClick = {
+                    navController.navigate(Screens.MainScreen.route)
+                },
+                    modifier = Modifier
+                        .fillMaxWidth()
+//                        .height(56.dp) // Adjust the height as needed
+                        .padding(horizontal = 24.dp, vertical = 8.dp), // Adjust the padding as needed
+                    shape = RoundedCornerShape(8.dp), // Adjust the corner radius as needed
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color.Black, // Adjust the background color as needed
+                        contentColor = Color.White // Adjust the text color as needed
+                    )) {
+                    Text("Get Started",
+                        style = TextStyle(
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 20.sp,
+                            letterSpacing = 0.5.sp
+                        ),
+                        modifier = Modifier.padding(10.dp)
+                    )
+
+                }
             }
         }
     }
