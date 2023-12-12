@@ -15,44 +15,20 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import com.example.recipebook.Lists.Beverages
+import com.example.recipebook.Lists.CuisineList
+import com.example.recipebook.Lists.Desserts
+import com.example.recipebook.Lists.Diet
+import com.example.recipebook.Lists.MealTypes
+import com.example.recipebook.Lists.Proteins
+import com.example.recipebook.Lists.coursesList
 import com.example.recipebook.data.ItemCategory
 
 
-val categoryItems = listOf(
-    ItemCategory(title = "Breakfast", imgResId = R.drawable.englishbreakfast),
-    ItemCategory(title = "Lunch", imgResId = R.drawable.lunch),
-    ItemCategory(title = "Dinner", imgResId = R.drawable.christmasdinner),
-    ItemCategory(title = "Desserts", imgResId = R.drawable.cupcake),
-    ItemCategory(title = "Drinks", imgResId = R.drawable.drink),
-    ItemCategory(title = "Breakfast", imgResId = R.drawable.englishbreakfast),
-    ItemCategory(title = "Lunch", imgResId = R.drawable.lunch),
-    ItemCategory(title = "Dinner", imgResId = R.drawable.christmasdinner),
-    ItemCategory(title = "Desserts", imgResId = R.drawable.cupcake),
 
-    // Add more items as needed
-)
-val coursesList = listOf(
-    ItemCategory(title = "Breakfast", imgResId = R.drawable.englishbreakfast),
-    ItemCategory(title = "Lunch", imgResId = R.drawable.lunch),
-    ItemCategory(title = "Dinner", imgResId = R.drawable.christmasdinner),
-
-    // Add more items as needed
-)
-val CuisineList = listOf(
-    ItemCategory(title = "Breakfast", imgResId = R.drawable.englishbreakfast),
-    ItemCategory(title = "Lunch", imgResId = R.drawable.lunch),
-    ItemCategory(title = "Dinner", imgResId = R.drawable.christmasdinner),
-    ItemCategory(title = "Desserts", imgResId = R.drawable.cupcake),
-    ItemCategory(title = "Drinks", imgResId = R.drawable.drink),
-    ItemCategory(title = "Breakfast", imgResId = R.drawable.englishbreakfast),
-    ItemCategory(title = "Lunch", imgResId = R.drawable.lunch),
-    ItemCategory(title = "Dinner", imgResId = R.drawable.christmasdinner),
-    ItemCategory(title = "Desserts", imgResId = R.drawable.cupcake),
-
-    // Add more items as needed
-)
 @Composable
-fun CategoryScreen() {
+fun CategoryScreen(navController: NavController) {
     Surface(
         modifier = Modifier
             .padding(bottom = 30.dp)
@@ -64,17 +40,29 @@ fun CategoryScreen() {
         )
         {
             item {
-                ListItem(items = coursesList , "Courses",null , 130.dp)
+                ListItem(items = coursesList , "Courses",navController= navController, null , 130.dp)
 
             }
             item {
-                ListItem(items = CuisineList , "Cuisines",null , 380.dp)
+                ListItem(items = CuisineList , "Cuisines",navController= navController,null , 380.dp)
 
             }
             item {
-                ListItem(items = CuisineList , "Cuisines",null , 380.dp)
-
+                ListItem(items = Beverages , "Beverages",navController= navController,null , 250.dp)
             }
+            item {
+                ListItem(items = MealTypes , "MealTypes ",navController= navController,null , 250.dp)
+            }
+            item {
+                ListItem(items = Proteins , "Proteins",navController= navController,null , 130.dp)
+            }
+            item {
+                ListItem(items = Desserts , "Desserts",navController= navController,null , 250.dp)
+            }
+            item {
+                ListItem(items = Diet , "Dietary Preferences",navController= navController,null , 300.dp)
+            }
+
         }
     }
 }
@@ -83,6 +71,7 @@ fun CategoryScreen() {
 fun ListItem(
     items :List<ItemCategory>,
     categoryTitle : String,
+    navController: NavController,
     numColumns: Int? = null,
     maxHeight: Dp? = Dp.Unspecified,
     min : Dp? = 110.dp)
@@ -99,6 +88,6 @@ fun ListItem(
                 bottom = 20.dp
             )
         )
-        CategoryButton(items, numColumns, maxHeight,min)
+        CategoryButton(items,navController= navController, numColumns, maxHeight,min)
     }
 }

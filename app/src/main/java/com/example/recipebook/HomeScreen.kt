@@ -56,8 +56,7 @@ fun HomeScreen(navController: NavController) {
                             bottom = 20.dp // Bottom padding
                         )
                 )
-
-                CategoryButton(recipeItems , 3 ,400.dp , 80.dp)
+                CategoryButton(recipeItems ,navController, 3 ,400.dp , 80.dp)
             }
         }
         item{
@@ -71,6 +70,9 @@ fun HomeScreen(navController: NavController) {
                 Text("Search")
             }
         }
+//        item{
+//            retrievedata()
+//        }
         // Add more items as needed
     }
 }
@@ -80,7 +82,8 @@ fun HomeScreen(navController: NavController) {
 @Composable
 fun SearchBox(){
     Box(
-        modifier = Modifier.height(100.dp)
+        modifier = Modifier
+            .height(100.dp)
             .fillMaxWidth()
             .padding(top = 16.dp)
             ,
@@ -108,6 +111,7 @@ fun DisplayRecipeGrid(navController: NavController) {
 
     RecipePage(recipes = recipes ,navController, 2 , 450.dp,2.dp)
 }
+
 //---------------------------------------Component 3
 val recipeItems = listOf(
     ItemCategory(title = "Breakfast", imgResId = R.drawable.englishbreakfast),

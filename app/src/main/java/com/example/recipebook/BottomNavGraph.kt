@@ -21,7 +21,7 @@ fun BottomNavGraph(navController: NavHostController , modifier : Modifier) {
             RecipesScreen(navController = navController)
         }
         composable(route = BottomBarScreen.Categories.route) {
-            CategoryScreen()
+            CategoryScreen(navController = navController)
         }
 
         composable(route = "videoPage/{recipeId}") { backStackEntry ->
@@ -40,8 +40,19 @@ fun BottomNavGraph(navController: NavHostController , modifier : Modifier) {
         composable(route = "searchRecipe") {
             SearchTest(navController = navController)
         }
-//        composable(route = "getRecipe") {
-//            VideoTest()
-//        }
+        composable(route = "categoryRecipes/{category}") {
+            backStackEntry ->
+                val category = backStackEntry.arguments?.getString("category")
+                if (category != null) {
+                    Log.d("Category to search" , category)
+                }
+                else
+                    Log.d("Category to search" , "category is null")
+            if (category != null) {
+                CategoryRecipes(navController = navController , category)
+            }
+        }
     }
 }
+
+
