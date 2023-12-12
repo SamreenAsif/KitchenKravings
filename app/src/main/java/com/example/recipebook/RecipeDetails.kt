@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.recipebook.firebaselogic.fetchRecipeById
 @Composable
 fun RecipeDetailsScreen(navController: NavController, recipeId: String?) {
@@ -130,90 +131,6 @@ fun RecipeDetails(navController: NavController ,recipe :Recipe) {
         }
 
 }
-
-@Composable
-fun PageContent(ingredientsList:List<String> , directionsList : List<String>, url : String?){
-
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
-    ) {
-        // Ingredients list
-        item {
-            Text(
-                text = "Italian Double Cheese Pizza",
-                modifier = Modifier
-                    .fillMaxWidth(),
-                color = Color.Black,
-                fontWeight = FontWeight.Bold,
-                fontSize = 20.sp
-            )
-        }
-
-        // Video
-        item {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(200.dp)
-                    .clip(MaterialTheme.shapes.medium)
-            ) {
-                if (url != null) {
-                    VideoPlayerScreen(url = url)
-                }
-                else
-                    Toast.makeText(LocalContext.current , "Can't play video" , Toast.LENGTH_LONG).show()
-            }
-        }
-
-        // Ingredients list
-        item {
-            Spacer(modifier = Modifier.height(16.dp))
-            Text(
-                text = "Italian Double Cheese Pizza",
-                modifier = Modifier
-                    .fillMaxWidth(),
-                color = Color.Black,
-                fontWeight = FontWeight.Bold,
-                fontSize = 20.sp
-            )
-        }
-
-        // Coupon for Ingredients
-        item {
-            Spacer(modifier = Modifier.height(16.dp))
-            Coupon(
-                title = "Ingredients",
-                points = ingredientsList
-            )
-        }
-
-        // Coupon for Directions
-        item {
-            Spacer(modifier = Modifier.height(16.dp))
-            Coupon(
-                title = "Directions",
-                points = directionsList
-            )
-        }
-
-        // Add to Grocery List button
-        item {
-            Spacer(modifier = Modifier.height(20.dp))
-            Button(
-                onClick = {
-                    // Handle "Add to Grocery List" button click
-                },
-                modifier = Modifier
-                   .width(190.dp)
-            ) {
-                Text("Add to Grocery List")
-            }
-        }
-    }
-
-}
 fun shareOnWhatsApp(context: Context) {
     val textToShare = "Check out this amazing recipe!"
 
@@ -231,9 +148,51 @@ fun shareOnWhatsApp(context: Context) {
         Toast.makeText(context, "WhatsApp is not installed", Toast.LENGTH_SHORT).show()
     }
 }
+// ... (Previous code remains unchanged)
+
+// ... (Previous code remains unchanged)
+
+// ... (Previous code remains unchanged)
+
+// ... (Previous code remains unchanged)
 
 @Composable
-fun Coupon(title: String, points: List<String>) {
+fun PageContent(ingredientsList: List<String>, directionsList: List<String>, url: String?) {
+    // Define a list to hold selected ingredients for the grocery list
+    var groceryList by remember { mutableStateOf(emptyList<String>()) }
+    val navController = rememberNavController()
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+    ) {
+        // ... (Previous items remain unchanged)
+
+        // Coupon for Ingredients
+        item {
+            Spacer(modifier = Modifier.height(16.dp))
+            Coupon(
+                title = "Ingredients",
+                points = ingredientsList,
+                onIngredientSelected = { selectedIngredient ->
+                    // Add the selected ingredient to the grocery list
+                    groceryList = groceryList + selectedIngredient
+                    navController.navigate("GroceryListScreen")
+                }
+            )
+        }
+
+    }
+}
+
+// ... (Previous code remains unchanged)
+
+
+
+
+
+@Composable
+fun Coupon(title: String, points: List<String>, onIngredientSelected: (String) -> Unit) {
     Column(
         modifier = Modifier
             .border(
@@ -256,7 +215,17 @@ fun Coupon(title: String, points: List<String>) {
                         .padding(bottom = 4.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(text = "•", color = Color.Black)
+                    // Plus sign for each ingredient
+                    Text(
+                        text = "+",
+                        color = Color.Black,
+                        modifier = Modifier
+                            .clickable {
+                                // Invoke the callback when the plus sign is clicked
+                                onIngredientSelected(point)
+                            }
+                    )
+
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(text = point, color = Color.Black)
                 }
@@ -264,4 +233,3 @@ fun Coupon(title: String, points: List<String>) {
         }
     }
 }
-

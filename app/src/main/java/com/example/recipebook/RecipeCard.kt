@@ -1,6 +1,7 @@
 package com.example.recipebook
 
 import android.net.Uri
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -119,7 +120,19 @@ import kotlinx.coroutines.tasks.await
 @Composable
 fun RecipeCard(data: Recipe, navController: NavController) {
     var isLiked by remember { mutableStateOf(false) }
+    var fav :AddFavorites = AddFavorites()
+    fun toggleLikeStatus() {
+        // TODO: Implement logic to add/remove the recipe from favorites
+        isLiked = !isLiked
 
+        if (isLiked) {
+            // Add the recipe to favorites
+            data.id?.let { fav.addRecipeToFavorites(it) }
+        } else {
+            // Remove the recipe from favorites
+            data.id?.let { fav.removeRecipeFromFavorites(it) }
+        }
+    }
     Card(
         modifier = Modifier
             .padding(8.dp)
@@ -165,7 +178,7 @@ fun RecipeCard(data: Recipe, navController: NavController) {
                         .padding(8.dp)
                         .align(Alignment.TopEnd)
                         .clickable {
-                            isLiked = !isLiked
+                            toggleLikeStatus()
                         }
                 )
             }
