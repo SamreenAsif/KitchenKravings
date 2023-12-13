@@ -12,5 +12,8 @@ data class Recipe(
     val videoUri: String? = null,
     val ingredients: List<String>? = null,
     val directions: List<String>? = null,
-    val category: String? = null
+//    val category: List<String>? = null
+    val type : String? = null,
+    val cuisine : String? = null ,
+    val drinkType : String? = null ,
 ) : Serializable

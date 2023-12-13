@@ -570,7 +570,6 @@ import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.ui.graphics.Color
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -583,16 +582,10 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.*
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -606,7 +599,7 @@ import com.google.firebase.database.FirebaseDatabase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.io.Serializable
+val cookingTime = listOf("10" , "15" , "20","30","45","60")
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -619,23 +612,26 @@ fun AddRecipeScreen(onRecipeAdded: (Recipe) -> Unit) {
     var servings by remember { mutableStateOf("") }
     var ingredientText by remember { mutableStateOf("") }
     var directionText by remember { mutableStateOf("") }
-    val category by remember { mutableStateOf("") }
+//    var category by remember { mutableStateOf(emptyList<String>()) }
     var ingredients by remember { mutableStateOf(emptyList<String>()) }
     var directions by remember { mutableStateOf(emptyList<String>()) }
     var showVideoError by remember { mutableStateOf(false) }
     var showIngredientsError by remember { mutableStateOf(false) }
     var showDirectionsError by remember { mutableStateOf(false) }
     var isDialogVisible by remember { mutableStateOf(false) }
-    var selectedCategory by remember { mutableStateOf("") }
-    val categories = listOf("Asian", "Chinese", "Continental")
+    var selectedCategory by remember { mutableStateOf(emptyList<String>()) }
     var isVideoAdded by remember { mutableStateOf(false) }
     var isImageAdded by remember { mutableStateOf(false) }
     var isIngredientsAdded by remember { mutableStateOf(false) }
     var isDirectionsAdded by remember { mutableStateOf(false) }
+    var typeState by remember { mutableStateOf("") }
+    var drinkState by remember { mutableStateOf("") }
+    var cuisineState by remember { mutableStateOf("") }
+
     val context = LocalContext.current
 
     // Get firebase realtime database instance
-    val recipesRef = FirebaseDatabase.getInstance().getReference("recipes")
+    val recipesRef = FirebaseDatabase.getInstance().getReference("recipe")
 
     val coroutineScope = rememberCoroutineScope()
 
@@ -694,7 +690,10 @@ fun AddRecipeScreen(onRecipeAdded: (Recipe) -> Unit) {
                                     videoUri =  videouri?.toString(),
                                     ingredients = ingredients,
                                     directions = directions,
-                                    category = category
+                                    type = typeState,
+                                    cuisine = cuisineState,
+                                    drinkType = drinkState
+
                                 )
                                 onRecipeAdded(recipe)
                             } else {
@@ -744,8 +743,17 @@ fun AddRecipeScreen(onRecipeAdded: (Recipe) -> Unit) {
                                 )
                                 if (uri == null) {
                                     val uriString = uri?.toString() ?: "URI is null"
-                                    Toast.makeText(context, "Selected URI: $uriString", Toast.LENGTH_SHORT).show()
-                                    Log.e("AddRecipeScreen", "Error: Unable to process URI after img added - $uriString")
+                                    Toast
+                                        .makeText(
+                                            context,
+                                            "Selected URI: $uriString",
+                                            Toast.LENGTH_SHORT
+                                        )
+                                        .show()
+                                    Log.e(
+                                        "AddRecipeScreen",
+                                        "Error: Unable to process URI after img added - $uriString"
+                                    )
                                 }
                             },
                         contentAlignment = Alignment.Center
@@ -785,15 +793,21 @@ fun AddRecipeScreen(onRecipeAdded: (Recipe) -> Unit) {
                 }
 
                 // Cooking Time Section
-                item {
-                    TextField(
-                        value = cookingTime,
-                        onValueChange = { cookingTime = it },
-                        label = { Text("Cooking Time") },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(bottom = 8.dp)
-                    )
+//                item {
+//                    TextField(
+//                        value = cookingTime,
+//                        onValueChange = { cookingTime = it },
+//                        label = { Text("Cooking Time") },
+//                        modifier = Modifier
+//                            .fillMaxWidth()
+//                            .padding(bottom = 8.dp)
+//                    )
+//                }
+                item{
+                    ChipTitle(title = "Cooking Time")
+                    test(com.example.recipebook.cookingTime) { selectedValue ->
+                        cookingTime = selectedValue
+                    }
                 }
 
                 // Servings Section
@@ -802,6 +816,8 @@ fun AddRecipeScreen(onRecipeAdded: (Recipe) -> Unit) {
                         value = servings,
                         onValueChange = { servings = it },
                         label = { Text("Servings") },
+                        keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
+
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(bottom = 8.dp)
@@ -823,8 +839,17 @@ fun AddRecipeScreen(onRecipeAdded: (Recipe) -> Unit) {
                                 )
                                 if (videouri == null) {
                                     val uriString = videouri?.toString() ?: "URI is null"
-                                    Toast.makeText(context, "Selected URI: $uriString", Toast.LENGTH_SHORT).show()
-                                    Log.e("Vide0Error" ,"Error: Unable to process URI after video added - $uriString")
+                                    Toast
+                                        .makeText(
+                                            context,
+                                            "Selected URI: $uriString",
+                                            Toast.LENGTH_SHORT
+                                        )
+                                        .show()
+                                    Log.e(
+                                        "Vide0Error",
+                                        "Error: Unable to process URI after video added - $uriString"
+                                    )
                                 }
                             },
                         contentAlignment = Alignment.Center
@@ -851,32 +876,58 @@ fun AddRecipeScreen(onRecipeAdded: (Recipe) -> Unit) {
                 }
 
                 // Category Section (Checkbox)
+//                item {
+//                    Text(
+//                        text = "Category",
+//                        fontWeight = FontWeight.Bold,
+//                        fontSize = 20.sp,
+//                        modifier = Modifier.padding(bottom = 8.dp)
+//                    )
+//                    Row(
+//                        modifier = Modifier
+//                            .fillMaxWidth()
+//                            .padding(bottom = 8.dp)
+//                    ) {
+//                        categories.forEach { categoryOption ->
+//                            Checkbox(
+//                                checked = selectedCategory == categoryOption,
+//                                onCheckedChange = {
+//                                    selectedCategory = if (it) categoryOption else ""
+//                                },
+//                                modifier = Modifier
+//                                    .padding(end = 8.dp)
+//                            )
+//                            Text(text = categoryOption, modifier = Modifier.padding(start = 4.dp))
+//                        }
+//                    }
+//                }
+//
+//                item{
+//                   selectedCategory = ChipDisplay()
+//                }
                 item {
-                    Text(
-                        text = "Category",
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 20.sp,
-                        modifier = Modifier.padding(bottom = 8.dp)
-                    )
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(bottom = 8.dp)
-                    ) {
-                        categories.forEach { categoryOption ->
-                            Checkbox(
-                                checked = selectedCategory == categoryOption,
-                                onCheckedChange = {
-                                    selectedCategory = if (it) categoryOption else ""
-                                },
-                                modifier = Modifier
-                                    .padding(end = 8.dp)
-                            )
-                            Text(text = categoryOption, modifier = Modifier.padding(start = 4.dp))
+                    Column() {
+
+                        // Combine values into a List<String>
+                        ChipTitle(title = "Type")
+                        test(type) { selectedValue ->
+                            typeState = selectedValue
+                        }
+                        // Check if the selected type is "Beverage"
+                        if (typeState == "Beverages") {
+                            // Display "Drink Type" options
+                            ChipTitle(title = "Drink Type")
+                            test(drinkType) { drinkTypeValue ->
+                                drinkState = drinkTypeValue
+                            }
+                        }
+
+                        ChipTitle(title = "Cuisine")
+                        test(cuisineTitles) { selectedValue ->
+                            cuisineState = selectedValue
                         }
                     }
                 }
-
                 // Ingredients Section
                 item {
                     Text(
@@ -962,7 +1013,9 @@ fun AddRecipeScreen(onRecipeAdded: (Recipe) -> Unit) {
                                                     videoUri = videoUrl,
                                                     ingredients = ingredients,
                                                     directions = directions,
-                                                    category = selectedCategory
+                                                    type = typeState,
+                                                    cuisine = cuisineState,
+                                                    drinkType = drinkState
                                                 )
 
                                             //     Push the recipe data to the "recipes" node asynchronously

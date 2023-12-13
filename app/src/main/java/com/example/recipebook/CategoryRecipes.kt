@@ -17,15 +17,21 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.recipebook.data.Recipe
+import com.example.recipebook.firebaselogic.SearchType
 import com.example.recipebook.firebaselogic.searchRecipesFromFirebase
 
 @Composable
 fun CategoryRecipes(navController: NavController,searchTerm : String) {
     // State to hold the list of recipes
     var recipes by remember { mutableStateOf(emptyList<Recipe>()) }
-
+    Log.d("SearchTerm ", searchTerm)
     // Fetch recipes from Firebase and update the recipes state
-    recipes = searchRecipesFromFirebase(searchTerm = searchTerm)
+    recipes = searchRecipesFromFirebase(searchTerm, SearchType.ByCuisine)
+        .takeIf { it.isNotEmpty() }
+        ?: searchRecipesFromFirebase(searchTerm, SearchType.ByType)
+            .takeIf { it.isNotEmpty() }
+                ?: searchRecipesFromFirebase(searchTerm, SearchType.ByDrinkType)
+    Log.d("SearchTerm ", recipes.toString())
     if (recipes.isEmpty()) {
         Text(
             text = "No recipes found",

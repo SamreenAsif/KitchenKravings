@@ -52,6 +52,22 @@ fun BottomNavGraph(navController: NavHostController , modifier : Modifier) {
                 CategoryRecipes(navController = navController , category)
             }
         }
+        composable(route = "searchRecipes/{category}") {
+                backStackEntry ->
+            val category = backStackEntry.arguments?.getString("category")
+            if (category != null) {
+                Log.d("Category to search" , category)
+            }
+            else
+                Log.d("Category to search" , "category is null")
+            if (category != null) {
+                CategoryRecipes(navController = navController , category)
+            }
+        }
+        composable(route = "test-dropdown") {
+//            testDropdown()
+            ChipDisplay()
+        }
     }
 }
 

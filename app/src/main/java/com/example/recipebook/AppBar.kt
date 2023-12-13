@@ -35,6 +35,7 @@ fun AppBar(
         BottomBarScreen.Home.route -> "Hello,Guest!"
         BottomBarScreen.Recipes.route -> BottomBarScreen.Recipes.title
         BottomBarScreen.Categories.route -> BottomBarScreen.Categories.title
+
         else -> "Hello,Guest!" // Default title
     }
     CenterAlignedTopAppBar(

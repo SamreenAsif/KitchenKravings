@@ -35,7 +35,7 @@ fun HomeScreen(navController: NavController) {
         contentPadding = PaddingValues(top=10.dp ,bottom = 70.dp)
     ) {
         item {
-            SearchBox()
+            SearchBox(navController)
         }
         item {
                 MainRecipeCard(data = highlightRecipe)
@@ -70,6 +70,12 @@ fun HomeScreen(navController: NavController) {
                 Text("Search")
             }
         }
+      // test-dropdown
+        item{
+            Button(onClick = { navController.navigate("test-dropdown")}) {
+                Text("DropDown")
+            }
+        }
 //        item{
 //            retrievedata()
 //        }
@@ -80,7 +86,7 @@ fun HomeScreen(navController: NavController) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SearchBox(){
+fun SearchBox(navController: NavController){
     Box(
         modifier = Modifier
             .height(100.dp)
@@ -90,7 +96,16 @@ fun SearchBox(){
         contentAlignment = Alignment.TopCenter,
 
     ){
-        SearchBarM3()
+        var searchQuery by remember { mutableStateOf("") }
+
+        // Call the SearchBarM3 composable and pass the lambda function
+        SearchBarM3(navController) { newSearchQuery ->
+            // Handle the new search query in the calling composable
+         searchQuery = newSearchQuery
+        }
+//        if (searchQuery.isNotEmpty()){
+//            navController.navigate("categoryRecipes/${searchQuery}")
+//        }
     }
 }
 // component 2 ---------------------------
