@@ -30,7 +30,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.example.recipebook.firebaselogic.fetchRecipeById
 @Composable
 fun RecipeDetailsScreen(navController: NavController, recipeId: String?) {
@@ -76,16 +75,16 @@ fun RecipeDetails(navController: NavController ,recipe :Recipe) {
                     Text(text = title ?: "")
                 },
                 navigationIcon = {
-                        Icon(
-                            imageVector = Icons.Default.ArrowBack,
-                            contentDescription = "Back",
-                            modifier = Modifier.clickable {
-                                navController.popBackStack()
-                            },
-                            tint = Color.Black
-                        )
+                    Icon(
+                        imageVector = Icons.Default.ArrowBack,
+                        contentDescription = "Back",
+                        modifier = Modifier.clickable {
+                            navController.popBackStack()
+                        },
+                        tint = Color.Black
+                    )
 
-                    },
+                },
                 actions = {
                     // Share icon
                     Icon(
@@ -121,15 +120,50 @@ fun RecipeDetails(navController: NavController ,recipe :Recipe) {
             }
         },
 
-    )
-            // Launch the effect when the share icon is clicked
-        LaunchedEffect(shareClicked) {
-            if (shareClicked) {
-                shareOnWhatsApp(context)
-                shareClicked = false // Reset the state
-            }
+        )
+    // Launch the effect when the share icon is clicked
+    LaunchedEffect(shareClicked) {
+        if (shareClicked) {
+            shareOnWhatsApp(context)
+            shareClicked = false // Reset the state
+        }
+    }
+
+}
+
+@Composable
+fun PageContent(ingredientsList: List<String>, directionsList: List<String>, url: String?) {
+    // Define a list to hold selected ingredients for the grocery list
+    var groceryList by remember { mutableStateOf(emptyList<String>()) }
+
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+    ) {
+        // ... (Previous items remain unchanged)
+
+        // Coupon for Ingredients
+        item {
+            Spacer(modifier = Modifier.height(16.dp))
+            Coupon(
+                title = "Ingredients",
+                points = ingredientsList,
+                onIngredientSelected = { selectedIngredient ->
+                    // Add the selected ingredient to the grocery list
+                    groceryList = groceryList + selectedIngredient
+                }
+            )
         }
 
+        // ... (Previous items remain unchanged)
+
+        // Display the selected ingredients in the grocery list
+        item {
+            Spacer(modifier = Modifier.height(20.dp))
+            Text("Grocery List: ${groceryList.joinToString(", ")}")
+        }
+    }
 }
 fun shareOnWhatsApp(context: Context) {
     val textToShare = "Check out this amazing recipe!"
@@ -148,48 +182,6 @@ fun shareOnWhatsApp(context: Context) {
         Toast.makeText(context, "WhatsApp is not installed", Toast.LENGTH_SHORT).show()
     }
 }
-// ... (Previous code remains unchanged)
-
-// ... (Previous code remains unchanged)
-
-// ... (Previous code remains unchanged)
-
-// ... (Previous code remains unchanged)
-
-@Composable
-fun PageContent(ingredientsList: List<String>, directionsList: List<String>, url: String?) {
-    // Define a list to hold selected ingredients for the grocery list
-    var groceryList by remember { mutableStateOf(emptyList<String>()) }
-    val navController = rememberNavController()
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
-    ) {
-        // ... (Previous items remain unchanged)
-
-        // Coupon for Ingredients
-        item {
-            Spacer(modifier = Modifier.height(16.dp))
-            Coupon(
-                title = "Ingredients",
-                points = ingredientsList,
-                onIngredientSelected = { selectedIngredient ->
-                    // Add the selected ingredient to the grocery list
-                    groceryList = groceryList + selectedIngredient
-                    navController.navigate("GroceryListScreen")
-                }
-            )
-        }
-
-    }
-}
-
-// ... (Previous code remains unchanged)
-
-
-
-
 
 @Composable
 fun Coupon(title: String, points: List<String>, onIngredientSelected: (String) -> Unit) {

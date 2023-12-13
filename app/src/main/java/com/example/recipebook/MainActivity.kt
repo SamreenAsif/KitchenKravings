@@ -34,8 +34,8 @@ class MainActivity : ComponentActivity() {
 
                 ) {
 
-                   AuthNavGraph()
-               //     MainScreen()
+               //    AuthNavGraph()
+                    MainScreen()
                 }
 
             }
