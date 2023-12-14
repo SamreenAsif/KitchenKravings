@@ -1,7 +1,6 @@
 package com.example.recipebook
 
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -23,40 +22,57 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.recipebook.data.recipecard
+import androidx.navigation.NavController
+import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
+import com.bumptech.glide.integration.compose.GlideImage
+import com.example.recipebook.data.Recipe
 
+@OptIn(ExperimentalGlideComposeApi::class)
 @Composable
-fun MainRecipeCard (data : recipecard) {
+fun MainRecipeCard (data : Recipe, navController: NavController) {
     var isLiked by remember { mutableStateOf(false) }
+    var fav :AddFavorites = AddFavorites()
+    fun toggleLikeStatus() {
 
+        isLiked = !isLiked
+
+        if (isLiked) {
+            // Add the recipe to favorites
+            data.id?.let { fav.addRecipeToFavorites(it) }
+        } else {
+            // Remove the recipe from favorites
+            data.id?.let { fav.removeRecipeFromFavorites(it) }
+
+        }
+    }
     Card(
         modifier = Modifier
             .padding(8.dp)
             .clickable {
-                // Handle the click event
+                navController.navigate("videoPage/${data.id}")
             },
         elevation = 4.dp,
         backgroundColor = Color.White,
         shape = MaterialTheme.shapes.medium
     ) {
+
         Column() {
             Box {
-                Image(
-                    painter = painterResource(id = data.img), // Replace with your actual image resource
-                    contentDescription = null,
+                GlideImage(
+                    model = data.coverImageUri,
+                    contentDescription = data.title,
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(150.dp)
@@ -64,8 +80,17 @@ fun MainRecipeCard (data : recipecard) {
                         .alpha(0.9f),
                     contentScale = ContentScale.Crop
                 )
+                {
+                    // Glide request options (error and placeholder)
+                    it
+                        .error(R.drawable.ic_launcher_background)
+                        .placeholder(R.drawable.ic_launcher_foreground)
+                        .load(data)
+                }
 
-                val icon: ImageVector = if (isLiked) Icons.Default.Favorite else Icons.Default.FavoriteBorder
+
+                val icon: ImageVector =
+                    if (isLiked) Icons.Default.Favorite else Icons.Default.FavoriteBorder
 
                 Icon(
                     imageVector = icon,
@@ -76,7 +101,7 @@ fun MainRecipeCard (data : recipecard) {
                         .padding(8.dp)
                         .align(Alignment.TopEnd)
                         .clickable {
-                            isLiked = !isLiked
+                            toggleLikeStatus()
                         }
                 )
             }
@@ -84,18 +109,20 @@ fun MainRecipeCard (data : recipecard) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(8.dp)
+                    .padding(12.dp)
             ) {
-                Text(
-                    text = "${data.name}",
-                    fontWeight = FontWeight.Medium,
-                    fontSize = 18.sp,
-                    color = Color.Black,
-                    overflow = TextOverflow.Ellipsis,
-                    maxLines = 1,
-                    textAlign = TextAlign.Left,
-                    modifier = Modifier.fillMaxWidth(),
-                )
+               data.title?.let {
+                    Text(
+                        text = it,
+                        fontWeight = FontWeight.Light,
+                        fontSize = 16.sp,
+                        color = Color.Black,
+                        overflow = TextOverflow.Ellipsis,
+                        maxLines = 1,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.fillMaxWidth(),
+                    )
+                }
             }
             Row(
                 modifier = Modifier
@@ -103,7 +130,7 @@ fun MainRecipeCard (data : recipecard) {
                     .padding(8.dp)
             ) {
                 Text(
-                    text = "${data.desc}",
+                    text = "${data.description}",
                     fontWeight = FontWeight.Light,
                     fontSize = 14.sp,
                     color = Color.Gray,
@@ -114,6 +141,7 @@ fun MainRecipeCard (data : recipecard) {
                 )
             }
         }
-
     }
 }
+
+

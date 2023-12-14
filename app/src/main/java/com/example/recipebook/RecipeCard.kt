@@ -107,7 +107,7 @@ import com.example.recipebook.data.Recipe
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
-fun RecipeCard(data: Recipe, navController: NavController) {
+fun RecipeCard(data: Recipe, navController: NavController,showDesc : Boolean?) {
     var isLiked by remember { mutableStateOf(false) }
     var fav :AddFavorites = AddFavorites()
     fun toggleLikeStatus() {
@@ -188,6 +188,26 @@ fun RecipeCard(data: Recipe, navController: NavController) {
                         textAlign = TextAlign.Center,
                         modifier = Modifier.fillMaxWidth(),
                     )
+                }
+            }
+            if (showDesc == true){
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp)
+                ) {
+                    data.description?.let {
+                        Text(
+                            text = it,
+                            fontWeight = FontWeight.Light,
+                            fontSize = 14.sp,
+                            color = Color.Gray,
+                            overflow = TextOverflow.Visible,
+                            maxLines = 5,
+                            textAlign = TextAlign.Left,
+                            modifier = Modifier.fillMaxWidth(),
+                        )
+                    }
                 }
             }
         }

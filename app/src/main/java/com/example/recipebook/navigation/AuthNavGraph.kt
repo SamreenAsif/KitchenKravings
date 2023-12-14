@@ -13,7 +13,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.recipebook.MainScreen
-import com.example.recipebook.WelcomeScreen
 import com.example.recipebook.presentation.ForgotPasswordScreen
 import com.example.recipebook.presentation.GoogleSignInManager
 import com.example.recipebook.presentation.login_screen.SignInScreen
@@ -65,16 +64,18 @@ fun AuthNavGraph(
             ForgotPasswordScreen(navController = navController)
         }
         composable(route = Screens.WelcomeScreen.route) {
-            WelcomeScreen {
-                welcomeScreenVisible = false
-                Log.d("TAG", "Navigating from WelcomeScreen to SignInScreen")
-                if(signedIn){
-                    navController.navigate(Screens.MainScreen.route)
-                }else {
-                    navController.navigate(Screens.SignInScreen.route)
-                }
-            }
+//            WelcomeScreen {
+//                welcomeScreenVisible = false
+//                Log.d("TAG", "Navigating from WelcomeScreen to SignInScreen")
+//                if(signedIn){
+//                    navController.navigate(Screens.MainScreen.route)
+//                }else {
+//                    navController.navigate(Screens.SignInScreen.route)
+//                }
+//            }
+            navController.navigate(Screens.MainScreen.route)
         }
+
 
     }
 }

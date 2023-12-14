@@ -11,6 +11,7 @@ import androidx.compose.material.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -22,10 +23,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.recipebook.data.ItemCategory
+import com.example.recipebook.Lists.CuisineList
+import com.example.recipebook.Lists.coursesList
 import com.example.recipebook.data.Recipe
-import com.example.recipebook.data.recipecard
-import com.example.recipebook.firebaselogic.FetchRecipesFromFirebase
+import com.example.recipebook.firebaselogic.fetchRecipesFromFirebase
 
 
 @Composable
@@ -38,48 +39,36 @@ fun HomeScreen(navController: NavController) {
             SearchBox(navController)
         }
         item {
-                MainRecipeCard(data = highlightRecipe)
+//            MainRecipeCard(data = highlightRecipe , navController)
+            DisplayHighlightRecipe(navController = navController)
         }
-        item{
+        item {
             DisplayRecipeGrid(navController)
         }
-        item{
-            Column(){
+        item {
+            Column() {
                 Text(
-                    "More Categories" ,
-                    fontSize  = 20.sp ,
+                    "More Categories",
+                    fontSize = 20.sp,
                     fontWeight = FontWeight.Medium,
                     color = Color.Black,
                     modifier = Modifier.padding(
-                            start = 20.dp, // Left padding
-                            top = 8.dp, // Top padding
-                            bottom = 20.dp // Bottom padding
-                        )
+                        start = 20.dp, // Left padding
+                        top = 8.dp, // Top padding
+                        bottom = 20.dp // Bottom padding
+                    )
                 )
-                CategoryButton(recipeItems ,navController, 3 ,400.dp , 80.dp)
-            }
-        }
-        item{
-                Button(onClick = { navController.navigate("addRecipe")}) {
-                    Text("Become Chef")
-                }
-            }
+                CategoryButton(coursesList, navController, 3, 120.dp, 80.dp)
+                CategoryButton(CuisineList, navController, 3, 280.dp, 80.dp)
 
-        item{
-            Button(onClick = { navController.navigate("searchRecipe")}) {
-                Text("Search")
             }
         }
-      // test-dropdown
-        item{
-            Button(onClick = { navController.navigate("test-dropdown")}) {
-                Text("DropDown")
+        item {
+            Button(onClick = { navController.navigate("addRecipe") }) {
+                Text("Become Chef")
             }
         }
-//        item{
-//            retrievedata()
-//        }
-        // Add more items as needed
+
     }
 }
 
@@ -103,42 +92,32 @@ fun SearchBox(navController: NavController){
             // Handle the new search query in the calling composable
          searchQuery = newSearchQuery
         }
-//        if (searchQuery.isNotEmpty()){
-//            navController.navigate("categoryRecipes/${searchQuery}")
-//        }
     }
 }
-// component 2 ---------------------------
-val highlightRecipe : recipecard =
-    recipecard(
-        id = 1,
-        img = R.drawable.recipe1, // Replace with your actual drawable resource ID
-        name = "Spaghetti Bolognese",
-        desc = "Classic Italian pasta dish with rich tomato sauce and ground beef."
-    )
+
 
 @Composable
 fun DisplayRecipeGrid(navController: NavController) {
+    var recipes by remember { mutableStateOf<List<Recipe>>(emptyList()) }
 
-    var recipes by remember { mutableStateOf(emptyList<Recipe>()) }
-    // Fetch recipes from Firebase and update the recipes state
-    recipes = FetchRecipesFromFirebase(4)
+    LaunchedEffect(Unit) {
+       fetchRecipesFromFirebase(4) { fetchedRecipes ->
+            recipes = fetchedRecipes
+        }
+    }
 
-    RecipePage(recipes = recipes ,navController, 2 , 450.dp,2.dp)
+    RecipePage(recipes = recipes, navController, 2, 450.dp, 2.dp)
 }
+@Composable
+fun DisplayHighlightRecipe(navController: NavController) {
+    var recipes by remember { mutableStateOf<List<Recipe>>(emptyList()) }
 
-//---------------------------------------Component 3
-val recipeItems = listOf(
-    ItemCategory(title = "Breakfast", imgResId = R.drawable.englishbreakfast),
-    ItemCategory(title = "Lunch", imgResId = R.drawable.lunch),
-    ItemCategory(title = "Dinner", imgResId = R.drawable.christmasdinner),
-    ItemCategory(title = "Desserts", imgResId = R.drawable.cupcake),
-    ItemCategory(title = "Drinks", imgResId = R.drawable.drink),
-    ItemCategory(title = "Breakfast", imgResId = R.drawable.englishbreakfast),
-    ItemCategory(title = "Lunch", imgResId = R.drawable.lunch),
-    ItemCategory(title = "Dinner", imgResId = R.drawable.christmasdinner),
-    ItemCategory(title = "Desserts", imgResId = R.drawable.cupcake),
+    LaunchedEffect(Unit) {
+        fetchRecipesFromFirebase(1) { fetchedRecipe ->
+            recipes = fetchedRecipe
+        }
+    }
 
-    // Add more items as needed
-)
+    RecipePage(recipes = recipes, navController, 1, 300.dp, 2.dp,true)
+}
 

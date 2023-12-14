@@ -26,8 +26,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.recipebook.firebaselogic.SearchType
-import com.example.recipebook.firebaselogic.searchRecipesFromFirebase
 
 @ExperimentalMaterial3Api
 @Composable
@@ -104,9 +102,9 @@ fun SearchBarM3(navController : NavController ,onSearchQueryChanged: (String) ->
         }
     }
 }
-
-@Composable
-fun onSearchClicked(newQuery: String) {
-    val recipes = searchRecipesFromFirebase(searchTerm = newQuery, searchType =SearchType.ByDrinkType )
-
-}
+//
+//@Composable
+//fun onSearchClicked(newQuery: String) {
+//    val recipes = searchRecipesFromFirebase(searchTerm = newQuery, searchType =SearchType.ByDrinkType )
+//
+//}

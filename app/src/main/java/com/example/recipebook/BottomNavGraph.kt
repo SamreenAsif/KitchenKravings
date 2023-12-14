@@ -84,6 +84,23 @@ fun BottomNavGraph(navController: NavHostController , modifier : Modifier) {
         composable("FavouriteRecipesScreen") {
             FavouriteRecipesScreen(navController = navController) // Pass the actual user ID here
         }
+        composable("Courses") {
+            getCourses(navController = navController) // Pass the actual user ID here
+        }
+        composable("Drinks") {
+            getDrinks(navController = navController) // Pass the actual user ID here
+        }
+        composable("Indian") {
+            getIndianRecipes(navController = navController) // Pass the actual user ID here
+        }
+        composable("Cakes") {
+            getCakes(navController = navController) // Pass the actual user ID here
+        }
+        composable("MyRecipes") {
+            MyRecipes(navController = navController) // Pass the actual user ID here
+        }
+
+
     }
 }
 

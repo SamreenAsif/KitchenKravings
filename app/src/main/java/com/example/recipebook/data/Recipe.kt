@@ -4,6 +4,7 @@ import java.io.Serializable
 
 data class Recipe(
     var id: String? = null,
+    val chefId : String? = null ,
     val title: String? = null,
     val coverImageUri: String? = null,
     val description: String? = null,

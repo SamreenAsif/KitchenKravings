@@ -595,6 +595,7 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.recipebook.data.Recipe
 import com.example.recipebook.util.StorageUtil
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -629,9 +630,10 @@ fun AddRecipeScreen(onRecipeAdded: (Recipe) -> Unit) {
     var cuisineState by remember { mutableStateOf("") }
 
     val context = LocalContext.current
+    val userId = FirebaseAuth.getInstance().currentUser?.uid
 
     // Get firebase realtime database instance
-    val recipesRef = FirebaseDatabase.getInstance().getReference("recipe")
+    val recipesRef = FirebaseDatabase.getInstance().getReference("recipes")
 
     val coroutineScope = rememberCoroutineScope()
 
@@ -682,6 +684,7 @@ fun AddRecipeScreen(onRecipeAdded: (Recipe) -> Unit) {
                         onClick = {
                             if (isIngredientsAdded && isDirectionsAdded) {
                                 val recipe = Recipe(
+                                    chefId = userId,
                                     title = title,
                                     coverImageUri = uri?.toString(),
                                     description = description,
@@ -1005,6 +1008,7 @@ fun AddRecipeScreen(onRecipeAdded: (Recipe) -> Unit) {
                                             if (imageUrl.isNotEmpty() && videoUrl.isNotEmpty()) {
                                                 // Create the Recipe object with the Firebase Storage URLs
                                                 val recipe = Recipe(
+                                                    chefId = userId,
                                                     title = title,
                                                     coverImageUri = imageUrl,
                                                     description = description,

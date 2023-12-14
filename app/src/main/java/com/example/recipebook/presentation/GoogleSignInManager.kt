@@ -81,7 +81,6 @@ class GoogleSignInManager private constructor() {
 
             }else{
                 Toast.makeText(context, "No account info found.", Toast.LENGTH_SHORT).show()
-
             }
             return account
         }

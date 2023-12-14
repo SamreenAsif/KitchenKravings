@@ -32,27 +32,30 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.example.recipebook.presentation.GoogleSignInManager
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppBar(
     navController : NavHostController,
     scrollBehavior : TopAppBarScrollBehavior,
+    googleSignInManager: GoogleSignInManager?,
     onNavigationIconClick : () -> Unit
-){
+) {
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     // Get the current destination
     val currentDestination = navBackStackEntry?.destination?.route
+    val username = googleSignInManager?.profileInfo?.displayName ?: "Guest"
 
-    // Determine the title based on the current destination
+// Determine the title based on the current destination
     val title = when (currentDestination) {
-        BottomBarScreen.Home.route -> "Hello,Guest!"
+        BottomBarScreen.Home.route -> "Hello $username!"
         BottomBarScreen.Recipes.route -> BottomBarScreen.Recipes.title
         BottomBarScreen.Categories.route -> BottomBarScreen.Categories.title
-
-        else -> "Hello,Guest!" // Default title
+        else -> "Hello, Guest!" // Default title
     }
+
     CenterAlignedTopAppBar(
         colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
             containerColor = Color(android.graphics.Color.parseColor("#f06d0a")),
@@ -64,34 +67,26 @@ fun AppBar(
             ) {
                 Icon(
                     imageVector = Icons.Default.Menu,
-                    contentDescription = "Localized description",
-                    tint =  Color.White
+                    contentDescription = "Menu bar",
+                    tint =  Color.White,
+                    modifier = Modifier
+                        .size(30.dp)
                 )
             }
         },
-
-//        title = {
-//            Text(
-//                text = title,
-//                maxLines = 1,
-//                overflow = TextOverflow.Ellipsis,
-//                color = Color.White,
-//                fontSize = 20.sp,
-//
-//                )
-//        },
-        title = {
+        title =
+        {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(12.dp),
+                    .padding(10.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
                     text = title ?: "",
                     fontWeight = FontWeight.Light,
-                    fontSize = 16.sp,
+                    fontSize = 20.sp,
                     color = Color.White,
                     overflow = TextOverflow.Ellipsis,
                     maxLines = 1,
@@ -103,18 +98,15 @@ fun AppBar(
                 Icon(
                     imageVector = icon,
                     contentDescription = null,
-                    tint = Color.Red ,
+                    tint = Color.White ,
                     modifier = Modifier
                         .size(24.dp)
                         .clickable {
-                            // Handle icon click action
                             navController.navigate("FavouriteRecipesScreen")
                         }
-                )
+                    )
             }
-
         },
         scrollBehavior = scrollBehavior,
     )
-
 }

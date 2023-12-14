@@ -28,7 +28,8 @@ fun RecipePage(
     navController: NavController,
     numColumns: Int? = 2,
     maxHeight: Dp? = Dp.Unspecified,
-    bottompadding: Dp = 2.dp
+    bottompadding: Dp = 2.dp,
+    showDesc : Boolean = false ,
 ) {
     Surface(
         modifier = Modifier
@@ -62,7 +63,7 @@ fun RecipePage(
                         horizontalArrangement = Arrangement.spacedBy(0.dp)
                     ) {
                         items(recipes) { recipe ->
-                            RecipeCard(data = recipe , navController)
+                            RecipeCard(data = recipe , navController,showDesc)
                         }
                     }
                 }
