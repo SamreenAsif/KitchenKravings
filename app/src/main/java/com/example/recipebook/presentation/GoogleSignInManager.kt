@@ -3,10 +3,10 @@ package com.example.recipebook.presentation
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.navigation.NavController
-import androidx.navigation.NavHostController
 import com.example.recipebook.R
 import com.example.recipebook.navigation.Screens
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -52,21 +52,6 @@ class GoogleSignInManager private constructor() {
             return currentUser != null
         }
 
-    fun signIn(signedIn: Boolean, navController: NavHostController) {
-        Log.d("TAG", "signIn icon clicked")
-        val signInIntent = mGoogleSignInClient!!.signInIntent
-        activity!!.startActivityForResult(signInIntent, GOOGLE_SIGN_IN)
-        handleSignInResult(null, navController) { signedIn ->
-            // Handle the signedIn status here
-            if (signedIn) {
-
-                Toast.makeText(context, "Sign In Finished Successfully", Toast.LENGTH_SHORT).show()
-
-            } else {
-                Toast.makeText(context, "Sign In Finished Unsuccessfully", Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
     fun signOut(myNavController: NavController, callback: (Boolean) -> Unit){
         FirebaseAuth.getInstance().signOut()
         mGoogleSignInClient!!.signOut()
@@ -84,41 +69,43 @@ class GoogleSignInManager private constructor() {
             }
             return account
         }
-    fun handleSignInResult(
-        data: Intent?,
-        navController: NavHostController,
-        callback: (Boolean) -> Unit
-    ) = try{
+    fun handleSignInResult(data: Intent?, finalCallback: (Boolean) -> Unit) = try {
         val task = GoogleSignIn.getSignedInAccountFromIntent(data)
         val account = task.getResult(ApiException::class.java)
-        firebaseAuthWithGoogle(account.idToken,navController, callback)
-    }catch (e:ApiException){
-        Log.w("TAG", "signInResult:failed code = " + e.statusCode)
-        Toast.makeText(context, "Sign In Failed", Toast.LENGTH_SHORT).show()
-        Log.d("TAG", "SignIn fAILED")
+        firebaseAuthWithGoogle(account.idToken) { firebaseResult: Boolean ->
+
+            // Handle the result from Firebase authentication
+            finalCallback.invoke(firebaseResult)
+        }
+    } catch (e: ApiException) {
+        Log.d("TAG", "signInResult:failed code = " + e.statusCode)
+        Log.d("TAG", "SignIn FAILED")
+    }
+
+    fun signIn() {
+        Log.d("TAG", "signIn icon clicked")
+        val signInIntent = mGoogleSignInClient!!.signInIntent
+        val options: Bundle? = null // You can customize options if needed
+
+        activity?.startActivityForResult(signInIntent, GOOGLE_SIGN_IN, options)
     }
 
     private fun firebaseAuthWithGoogle(
         idToken: String?,
-        navController: NavHostController,
-        callback: (Boolean) -> Unit
+        finalCallback: (Boolean) -> Unit
     ) {
         val credential = GoogleAuthProvider.getCredential(idToken, null)
         mAuth!!.signInWithCredential(credential)
-            .addOnCompleteListener{
-                task->
-                if(task.isSuccessful){
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
                     Log.d("TAG", "signInWithCredential: SUCCESS")
                     val user = mAuth!!.currentUser
-                    Toast.makeText(context,"Signed in Successfully", Toast.LENGTH_SHORT).show()
-                    navController.navigate(Screens.MainScreen.route)
-                    callback.invoke(true)
-                    navController.navigate(Screens.MainScreen.route)
-                }
-                else{
+                    Toast.makeText(context, "Signed in Successfully", Toast.LENGTH_SHORT).show()
+                    finalCallback.invoke(true)
+                } else {
+                    Log.d("TAG", "signInWithCredential: Failed")
                     Toast.makeText(context, "Something went wrong!", Toast.LENGTH_SHORT).show()
-                    callback.invoke(false)
-                    navController.navigate(Screens.SignInScreen.route)
+                    finalCallback.invoke(false)
                 }
             }
     }

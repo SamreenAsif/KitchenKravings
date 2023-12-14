@@ -40,6 +40,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.MutableLiveData
 import androidx.navigation.NavHostController
 import com.example.recipebook.R
 import com.example.recipebook.navigation.Screens
@@ -51,7 +52,7 @@ import kotlinx.coroutines.launch
 fun SignInScreen(
     navController: NavHostController,
     googleSignInManager: GoogleSignInManager?,
-    signedIn:Boolean,
+    signInResultLiveData: MutableLiveData<Boolean>,
     viewModel: SignInViewModel = hiltViewModel(),
 ) {
     var email by rememberSaveable {
@@ -63,6 +64,14 @@ fun SignInScreen(
     val scope = rememberCoroutineScope()
     val context= LocalContext.current
     val state=viewModel.signInState.collectAsState(initial = null)
+
+    signInResultLiveData.observeForever { signInResult ->
+        if (signInResult) {
+            navController.navigate(Screens.MainScreen.route)
+        } else {
+            navController.navigate(Screens.SignInScreen.route)
+        }
+    }
 
     Column (
         modifier = Modifier
@@ -120,11 +129,11 @@ fun SignInScreen(
             modifier= Modifier
                 .fillMaxWidth()
                 .padding(top = 20.dp, start = 30.dp, end = 30.dp)
-                ,
+            ,
             colors = ButtonDefaults.buttonColors(containerColor = Color.Black, contentColor = Color.White),
             shape = RoundedCornerShape(15.dp),
 
-        ) {
+            ) {
             Text(text = "Sign In", color=Color.White, modifier = Modifier.padding(7.dp))
         }
         Row (modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center){
@@ -150,13 +159,7 @@ fun SignInScreen(
             .padding(top = 10.dp),
             horizontalArrangement = Arrangement.Center)
         {
-            IconButton(onClick = { googleSignInManager!!.signIn(signedIn, navController)
-            if(signedIn){
-                navController.navigate(Screens.MainScreen.route)
-            }else{
-                navController.navigate(Screens.SignInScreen.route)
-            }
-
+            IconButton(onClick = { googleSignInManager!!.signIn()
             }) {
                 Icon(painter = painterResource(id = R.drawable.google)
                     , contentDescription = "Google Icon",

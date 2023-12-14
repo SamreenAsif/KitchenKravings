@@ -44,7 +44,7 @@ import kotlinx.coroutines.launch
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen(googleSignInManager: GoogleSignInManager?, myNavController: NavController, signedIn:Boolean) {
+fun MainScreen(googleSignInManager: GoogleSignInManager?, myNavController: NavController) {
     val navController = rememberNavController()
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     val scaffoldState = rememberScaffoldState()
@@ -162,15 +162,13 @@ fun MainScreen(googleSignInManager: GoogleSignInManager?, myNavController: NavCo
                                     "logout" ->
                                     {
                                         googleSignInManager!!.signOut(myNavController){
-                                            signedIn->if(signedIn){}
-                                            else{}
+                                                signedIn->if(signedIn){}
+                                        else{}
                                         }
                                     }
-
                                 }
                                 scaffoldState.drawerState.close() // Close the drawer
                             }
-
                         }
                     )
                 }
