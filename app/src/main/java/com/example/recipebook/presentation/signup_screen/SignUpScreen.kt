@@ -44,12 +44,14 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.recipebook.R
 import com.example.recipebook.navigation.Screens
+import com.example.recipebook.presentation.GoogleSignInManager
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SignUpScreen(
     navController: NavHostController,
+    googleSignInManager: GoogleSignInManager?,
     viewModel: SignUpViewModel = hiltViewModel()
 ) {
     var email by rememberSaveable {

@@ -21,20 +21,21 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.recipebook.navigation.AuthNavGraph
+import com.example.recipebook.presentation.GoogleSignInManager
 import kotlinx.coroutines.launch
 
 @RequiresApi(Build.VERSION_CODES.O)
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen() {
+fun MainScreen(googleSignInManager: GoogleSignInManager?, myNavController: NavController, signedIn:Boolean) {
     val navController = rememberNavController()
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     val scaffoldState = rememberScaffoldState()
@@ -124,7 +125,10 @@ fun MainScreen() {
 //                            "courses" -> navController.navigate(Screen.Courses.route)
 //                            "cuisine" -> navController.navigate(Screen.Cuisine.route)
                             // Repeat the above for other menu items
-//                            "logout" -> navController.navigate(Screen.Logout.route)
+                            "logout" -> { googleSignInManager!!.signOut(myNavController){
+                                signedIn->if(signedIn){
+                                }else{}
+                            } }
                         }
                     }
 

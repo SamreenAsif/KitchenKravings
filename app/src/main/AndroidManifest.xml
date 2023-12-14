@@ -13,7 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.RecipeBook"
         tools:targetApi="31">
-
+        <meta-data android:name="com.google.android.gms.ads.APPLICATION_ID" android:value="ca-app-pub-7978175745854580~3004493741"/>
         <activity
             android:name=".MainActivity"
             android:exported="true"

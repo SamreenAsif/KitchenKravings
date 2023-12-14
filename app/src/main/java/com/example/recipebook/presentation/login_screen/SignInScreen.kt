@@ -43,14 +43,16 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.recipebook.R
 import com.example.recipebook.navigation.Screens
+import com.example.recipebook.presentation.GoogleSignInManager
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SignInScreen(
     navController: NavHostController,
-
-    viewModel: SignInViewModel = hiltViewModel()
+    googleSignInManager: GoogleSignInManager?,
+    signedIn:Boolean,
+    viewModel: SignInViewModel = hiltViewModel(),
 ) {
     var email by rememberSaveable {
         mutableStateOf("")
@@ -97,6 +99,17 @@ fun SignInScreen(
             singleLine = true,
             placeholder ={ Text(text = "Password")}
         )
+        Text(
+            text = "Forgot Password?",
+            color = Color.Gray,
+            fontFamily = FontFamily.Default,
+            modifier = Modifier
+                .clickable {
+                    navController.navigate(Screens.ForgotPasswordScreen.route)
+                }
+                .fillMaxWidth()
+                .padding(end = 16.dp).align(Alignment.End)
+        )
 
         Button(onClick = {
             scope.launch {
@@ -137,7 +150,14 @@ fun SignInScreen(
             .padding(top = 10.dp),
             horizontalArrangement = Arrangement.Center)
         {
-            IconButton(onClick = { /*TODO*/ }) {
+            IconButton(onClick = { googleSignInManager!!.signIn(signedIn, navController)
+            if(signedIn){
+                navController.navigate(Screens.MainScreen.route)
+            }else{
+                navController.navigate(Screens.SignInScreen.route)
+            }
+
+            }) {
                 Icon(painter = painterResource(id = R.drawable.google)
                     , contentDescription = "Google Icon",
                     modifier = Modifier.size(50.dp)
@@ -159,7 +179,7 @@ fun SignInScreen(
                     if(state.value?.isSuccess?.isNotEmpty()==true){
                         val success = state.value?.isSuccess
                         Toast.makeText(context, "${success}", Toast.LENGTH_LONG).show()
-                        navController.navigate(Screens.WelcomeScreen.route)
+                        navController.navigate(Screens.MainScreen.route)
                     }
                 }
             }
