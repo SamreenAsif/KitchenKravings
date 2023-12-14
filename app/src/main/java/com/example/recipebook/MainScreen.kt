@@ -166,11 +166,9 @@ fun MainScreen(googleSignInManager: GoogleSignInManager?, myNavController: NavCo
                                             else{}
                                         }
                                     }
-
                                 }
                                 scaffoldState.drawerState.close() // Close the drawer
                             }
-
                         }
                     )
                 }
