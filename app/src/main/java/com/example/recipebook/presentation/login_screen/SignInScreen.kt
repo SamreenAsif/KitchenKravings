@@ -147,7 +147,7 @@ fun SignInScreen(
             color =Color.Black,
             fontFamily = FontFamily.Default,
             modifier = Modifier.clickable {
-                navController.navigate(Screens.SignInScreen.route)
+                navController.navigate(Screens.SignUpScreen.route)
             }
         )
         Text(text = "or connect with", fontWeight = FontWeight.Medium,
