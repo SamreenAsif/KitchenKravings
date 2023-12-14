@@ -64,7 +64,16 @@ fun HomeScreen(navController: NavController) {
             }
         }
         item {
-            Button(onClick = { navController.navigate("addRecipe") }) {
+            Button(
+                onClick = { navController.navigate("addRecipe") },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        start = 20.dp, // Left padding
+                        top = 8.dp, // Top padding
+                        bottom = 20.dp // Bottom padding
+                    )
+            ) {
                 Text("Become Chef")
             }
         }
