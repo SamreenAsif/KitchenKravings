@@ -162,7 +162,9 @@ fun MainScreen(googleSignInManager: GoogleSignInManager?, myNavController: NavCo
                                     "logout" ->
                                     {
                                         googleSignInManager!!.signOut(myNavController){
-                                                signedIn->if(signedIn){}
+                                                signedIn->if(signedIn){
+                                                     myNavController.navigate("SignInScreen")
+                                                }
                                         else{}
                                         }
                                     }
