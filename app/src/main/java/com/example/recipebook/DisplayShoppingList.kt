@@ -41,7 +41,6 @@ fun ShoppingListScreen(navController: NavController) {
             .fillMaxSize()
             .padding(8.dp)
             .background(Color.LightGray)
-
     ) {
         TopAppBar(
             title = { Text(text = "Shopping List") },
@@ -52,6 +51,14 @@ fun ShoppingListScreen(navController: NavController) {
                     Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Back")
                 }
             }
+        )
+
+        // Display the count of items in the shopping list
+        Text(
+            text = "Number of Items: ${shoppingList.size}",
+            fontSize = 18.sp,
+            color = Color.Black,
+            modifier = Modifier.padding(8.dp)
         )
 
         if (shoppingList.isEmpty()) {
@@ -71,13 +78,11 @@ fun ShoppingListScreen(navController: NavController) {
                 modifier = Modifier
                     .fillMaxSize()
             ) {
-
                 items(shoppingList) { item ->
                     ShoppingListItem(
-
                         item = item,
                         onRemoveItem = { removedItem ->
-                            Log.d("fjvfjv" , "$removedItem")
+                            Log.d("fjvfjv", "$removedItem")
                             shoppingList = shoppingList.toMutableList().also { it.remove(removedItem) }
                             shplist.removeIngredientFromShoppingList(removedItem)
                         }
@@ -106,7 +111,8 @@ fun ShoppingListItem(item: String, onRemoveItem: (String) -> Unit) {
                     .padding(bottom = 8.dp),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                // Ingredient name on the left
+                // Ingredie
+                // nt name on the left
                 Text(
                     text = item,
                     fontSize = 20.sp,
