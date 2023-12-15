@@ -48,12 +48,11 @@ fun AppBar(
     val currentDestination = navBackStackEntry?.destination?.route
     val username = googleSignInManager?.profileInfo?.displayName ?: "Guest"
 
-// Determine the title based on the current destination
     val title = when (currentDestination) {
         BottomBarScreen.Home.route -> "Hello $username!"
         BottomBarScreen.Recipes.route -> BottomBarScreen.Recipes.title
         BottomBarScreen.Categories.route -> BottomBarScreen.Categories.title
-        else -> "Hello, Guest!" // Default title
+        else -> "Hello $username!" // Default title
     }
 
     CenterAlignedTopAppBar(

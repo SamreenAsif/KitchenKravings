@@ -37,6 +37,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -46,6 +47,7 @@ import com.example.recipebook.R
 import com.example.recipebook.navigation.Screens
 import com.example.recipebook.presentation.GoogleSignInManager
 import kotlinx.coroutines.launch
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -101,6 +103,7 @@ fun SignInScreen(
         TextField(value = password, onValueChange = {
             password= it
         }, modifier = Modifier.fillMaxWidth(),
+            visualTransformation = PasswordVisualTransformation(),
             colors = TextFieldDefaults.textFieldColors(containerColor= Color.LightGray,
                 cursorColor = Color.Black,
                 disabledLabelColor = Color.Gray,

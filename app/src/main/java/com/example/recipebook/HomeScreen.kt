@@ -1,5 +1,6 @@
 package com.example.recipebook
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -7,8 +8,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.Button
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -64,17 +67,21 @@ fun HomeScreen(navController: NavController) {
             }
         }
         item {
-           Button(modifier = Modifier
-               // .background(color = Color(0xFFf06d0a)) // Use Color() to specify the color
-                .padding(16.dp) // Add some padding for better appearance
-                .fillMaxWidth(), // Make the button fill the width of its container
-                onClick = { navController.navigate("addRecipe") })
-               {
+            Button(
+                modifier = Modifier
+                    // .background(color = Color(0xFFf06d0a)) // Use Color() to specify the color
+                    .padding(16.dp) // Add some padding for better appearance
+                    .fillMaxWidth(), // Make the button fill the width of its container
+                onClick = { navController.navigate("addRecipe") },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFFf06d0a), // Change the color here
+                    contentColor = Color.White // Change the text color if needed
+                )
+            )
+            {
                 Text("Become Chef")
-
             }
         }
-
     }
 }
 
@@ -126,4 +133,3 @@ fun DisplayHighlightRecipe(navController: NavController) {
 
     RecipePage(recipes = recipes, navController, 1, 300.dp, 2.dp,true)
 }
-

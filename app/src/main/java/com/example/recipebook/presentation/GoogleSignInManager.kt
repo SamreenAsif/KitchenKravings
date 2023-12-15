@@ -52,12 +52,10 @@ class GoogleSignInManager private constructor() {
             return currentUser != null
         }
 
-    fun signOut(myNavController: NavController, callback: (Boolean) -> Unit){
+    fun signOut(){
         FirebaseAuth.getInstance().signOut()
         mGoogleSignInClient!!.signOut()
         Toast.makeText(context, "Signed Out.", Toast.LENGTH_SHORT).show()
-        callback.invoke(false)
-        myNavController.navigate(Screens.WelcomeScreen.route)
     }
     val profileInfo:FirebaseUser?
         get(){

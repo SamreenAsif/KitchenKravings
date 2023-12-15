@@ -44,7 +44,7 @@ fun CategoryScreen(navController: NavController) {
 
             }
             item {
-                ListItem(items = CuisineList , "Cuisines",navController= navController,null , 380.dp)
+                ListItem(items = CuisineList , "Cuisines",navController= navController,null , 300.dp)
 
             }
             item {
