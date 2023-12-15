@@ -65,7 +65,7 @@ fun HomeScreen(navController: NavController) {
         }
         item {
            Button(modifier = Modifier
-                .background(color = Color(0xFFf06d0a)) // Use Color() to specify the color
+               // .background(color = Color(0xFFf06d0a)) // Use Color() to specify the color
                 .padding(16.dp) // Add some padding for better appearance
                 .fillMaxWidth(), // Make the button fill the width of its container
                 onClick = { navController.navigate("addRecipe") })
